@@ -1,8 +1,9 @@
 package com.project.back_end.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * // @Entity annotation:
@@ -12,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "Admins")
 public class Admin {
+
     /**
      * // 1. 'id' field:
      * //    - Type: private Long
@@ -32,8 +34,7 @@ public class Admin {
      * //      - Used to log into the system.
      * //      - @NotNull validation ensures that this field cannot be null when creating or updating an Admin.
      */
-    @Valid
-    @NotNull(message = "Admin username cannot be null")
+    @NotNull(message = "Admin's username cannot be null")
     private String username;
 
     /**
@@ -44,8 +45,9 @@ public class Admin {
      * //      - The field is marked with @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) to prevent the password from being exposed in JSON responses.
      * //      - @NotNull validation ensures the password cannot be null when creating or updating an Admin.
      */
-    @Valid
-    @NotNull(message = "Admin password cannot be null")
+    @NotNull(message = "Admin's password cannot be null")
+    @Size(min = 6)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     /**
@@ -53,8 +55,7 @@ public class Admin {
      * //    - A no-argument constructor is implicitly provided, required by JPA for entity creation.
      * //    - A parameterized constructor can be added as needed.
      */
-
-    public Admin() {
+    Admin() {
     }
 
     public Admin(Long id, String username, String password) {
