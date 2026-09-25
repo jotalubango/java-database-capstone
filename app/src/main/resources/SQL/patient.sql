@@ -1,4 +1,4 @@
-INSERT INTO smart_clinic.patient (address, email, name, password, phone) VALUES
+INSERT INTO cms.patient (address, email, name, password, phone) VALUES
 ('101 Oak St, Cityville', 'jane.doe@example.com', 'Jane Doe', 'passJane1', '888-111-1111'),
 ('202 Maple Rd, Townsville', 'john.smith@example.com', 'John Smith', 'smithSecure', '888-222-2222'),
 ('303 Pine Ave, Villageton', 'emily.rose@example.com', 'Emily Rose', 'emilyPass99', '888-333-3333'),

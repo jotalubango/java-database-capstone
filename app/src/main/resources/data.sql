@@ -1,7 +1,7 @@
-INSERT INTO smart_clinic.admin (username, password)
+INSERT INTO cms.admin (username, password)
 VALUES ('admin', 'admin@1234');
 
-INSERT INTO smart_clinic.doctor (email, name, password, phone, specialty) VALUES
+INSERT INTO cms.doctor (email, name, password, phone, specialty) VALUES
 ('dr.adams@example.com', 'Dr. Emily Adams', 'pass12345', '555-101-2020', 'Cardiologist'),
 ('dr.johnson@example.com', 'Dr. Mark Johnson', 'secure4567', '555-202-3030', 'Neurologist'),
 ('dr.lee@example.com', 'Dr. Sarah Lee', 'leePass987', '555-303-4040', 'Orthopedist'),
@@ -28,7 +28,7 @@ INSERT INTO smart_clinic.doctor (email, name, password, phone, specialty) VALUES
 ('dr.hill@example.com', 'Dr. Ethan Hill', 'hillclimb', '555-444-5556', 'Pediatrician'),
 ('dr.ward@example.com', 'Dr. Ruby Ward', 'wardWard', '555-555-6667', 'Dermatologist');
 
-INSERT INTO smart_clinic.patient (address, email, name, password, phone) VALUES
+INSERT INTO cms.patient (address, email, name, password, phone) VALUES
 ('101 Oak St, Cityville', 'jane.doe@example.com', 'Jane Doe', 'passJane1', '888-111-1111'),
 ('202 Maple Rd, Townsville', 'john.smith@example.com', 'John Smith', 'smithSecure', '888-222-2222'),
 ('303 Pine Ave, Villageton', 'emily.rose@example.com', 'Emily Rose', 'emilyPass99', '888-333-3333'),
@@ -55,7 +55,7 @@ INSERT INTO smart_clinic.patient (address, email, name, password, phone) VALUES
 ('125 Juniper Ct, Greenwood', 'leo.m@example.com', 'Leo Martin', 'leopass', '890-444-4444'),
 ('126 Olive Rd, Ashville', 'ella.moore@example.com', 'Ella Moore', 'ellamoore', '890-555-5555');
 
-INSERT INTO smart_clinic.appointment (appointment_time, status, doctor_id, patient_id) VALUES
+INSERT INTO cms.appointment (appointment_time, status, doctor_id, patient_id) VALUES
 ('2025-05-01 09:00:00.000000', 0, 1, 1),
 ('2025-05-02 10:00:00.000000', 0, 1, 2),
 ('2025-05-03 11:00:00.000000', 0, 1, 3),
@@ -187,7 +187,7 @@ INSERT INTO smart_clinic.appointment (appointment_time, status, doctor_id, patie
 ('2025-04-09 11:00:00.000000', 1, 4, 6),
 ('2025-04-10 13:00:00.000000', 1, 4, 7);
 
-INSERT INTO smart_clinic.doctor_available_times (doctor_id, available_times) VALUES
+INSERT INTO cms.doctor_available_times (doctor_id, available_times) VALUES
 (1, '09:00-10:00'), (1, '10:00-11:00'), (1, '11:00-12:00'), (1, '14:00-15:00'),
 (2, '10:00-11:00'), (2, '11:00-12:00'), (2, '14:00-15:00'), (2, '15:00-16:00'),
 (3, '09:00-10:00'), (3, '11:00-12:00'), (3, '14:00-15:00'), (3, '16:00-17:00'),

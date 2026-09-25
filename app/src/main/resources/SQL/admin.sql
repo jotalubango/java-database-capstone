@@ -1,2 +1,2 @@
-INSERT INTO smart_clinic.admin (username, password)
+INSERT INTO cms.admin (username, password)
 VALUES ('admin', 'admin@1234');
