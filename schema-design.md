@@ -11,6 +11,9 @@
 - **phone**: VARCHAR(20), NOT NULL, _Represents the patient's phone number._
 - **address**: VARCHAR(255), NOT NULL, _Represents the patient's address ._
 - **status**: INT, NOT NULL, _Represents the status of the patient.(0 = New, 1 = Active, 2 = Cancelled)_
+- **dateOfBirth**: DATE, NOT NULL, _Represents the date of birth of the patient._
+- **emergencyContact**: VARCHAR(20), NOT NULL, _Represents the patient's emergency contact._
+- **insuranceProvider**: VARCHAR(100), NOT NULL, _Represents the patient's insurance provider._
 
   Notes: Newly created Patients are given the state new, at the first appointment the state transits to Active. Patients with appointments cannot be deleted, can only be cancelled. Patients without any appointments can be deleted.  
 

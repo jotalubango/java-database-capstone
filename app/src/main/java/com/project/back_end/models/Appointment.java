@@ -14,7 +14,7 @@ import java.time.LocalTime;
  * //    - Required for persistence frameworks (e.g., Hibernate) to map the class to a database table.
  */
 @Entity
-@Table(name = "Appointments")
+@Table(name = "Appointment")
 public class Appointment {
 
     /**
@@ -111,6 +111,7 @@ public class Appointment {
      * //      - This method extracts only the date part from the appointmentTime field.
      * //      - It returns a LocalDate object representing just the date (without the time) of the scheduled appointment.
      */
+    @Transient
     public LocalDate getAppointmentDate() {
         return appointmentTime.toLocalDate();
     }
@@ -122,6 +123,7 @@ public class Appointment {
      * //      - This method extracts only the time part from the appointmentTime field.
      * //      - It returns a LocalTime object representing just the time (without the date) of the scheduled appointment.
      */
+    @Transient
     public LocalTime getAppointmentTimeOnly() {
         return appointmentTime.toLocalTime();
     }

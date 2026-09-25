@@ -15,7 +15,7 @@ import java.util.List;
  * //    - Required for persistence frameworks (e.g., Hibernate) to map the class to a database table.
  */
 @Entity
-@Table(name = "Doctors")
+@Table(name = "Doctor")
 public class Doctor {
 
     /**

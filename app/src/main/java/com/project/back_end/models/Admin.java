@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Size;
  * //    - It is required for persistence frameworks like Hibernate to map the class to a database table.
  */
 @Entity
-@Table(name = "Admins")
+@Table(name = "Admin")
 public class Admin {
 
     /**

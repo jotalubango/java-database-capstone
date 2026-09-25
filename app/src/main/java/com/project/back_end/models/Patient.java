@@ -2,10 +2,9 @@ package com.project.back_end.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+
+import java.time.LocalDate;
 
 /**
  * // @Entity annotation:
@@ -13,7 +12,7 @@ import jakarta.validation.constraints.Size;
  * //    - Required for persistence frameworks (e.g., Hibernate) to map the class to a database table.
  */
 @Entity
-@Table(name = "Patients")
+@Table(name = "Patient")
 public class Patient {
 
     /**
@@ -91,6 +90,36 @@ public class Patient {
     private String address;
 
     /**
+     * // 6.1 'dateOfBirth' field:
+     * //    - Type: private LocalDate
+     * //    - Description:
+     * //      - Represents the date of birth of the patient.
+     * //      - The @Past annotation ensures that the date of birth is in the past.
+     */
+    @Past
+    private LocalDate dateOfBirth;
+
+    /**
+     * // 6.1 'emergencyContact' field:
+     * //    - Type: private String
+     * //    - Description:
+     * //      - Represents the emergency contact (phone number) of the patient.
+     * //      - The @Pattern(regexp = "^[0-9]{1,20}$") annotation validates that the phone number must be at the most 20 digits.
+     */
+    @Pattern(regexp = "^[0-9]{1,20}$", message = "The emergency contact (phone number) of the patient must be a sequence of at the most 20 digits")
+    private String emergencyContact;
+
+    /**
+     * // 2. 'insuranceProvider' field:
+     * //    - Type: private String
+     * //    - Description:
+     * //      - Represents the patient's insurance provider.
+     * //      - The @Size(min = 3, max = 100) annotation ensures that the name length is between 3 and 100 characters.
+     */
+    @Size(max = 100, message = "Patient's insurance provider must be at the most 100 characters long")
+    private String insuranceProvider;
+
+    /**
      * //  Constructor(s):
      * //    - A no-argument constructor is implicitly provided, required by JPA for entity creation.
      * //    - A parameterized constructor can be added as needed.
@@ -98,13 +127,16 @@ public class Patient {
     Patient() {
     }
 
-    public Patient(Long id, String name, String email, String password, String phone, String address) {
+    public Patient(Long id, String name, String email, String password, String phone, String address, LocalDate dateOfBirth, String emergencyContact, String insuranceProvider) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
+        this.dateOfBirth = dateOfBirth;
+        this.emergencyContact = emergencyContact;
+        this.insuranceProvider = insuranceProvider;
     }
 
     /**
@@ -171,6 +203,9 @@ public class Patient {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", emergencyContact='" + emergencyContact + '\'' +
+                ", insuranceProvider='" + insuranceProvider + '\'' +
                 '}';
     }
 }
