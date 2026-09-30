@@ -1,5 +1,144 @@
 /*this is the style sheet for the adminDashboard. */
 
+*, *::before, *::after {
+    /* Remove all default margin and padding */
+    margin: 0;
+    padding: 0;
+
+    /* Use border-box for sizing to include padding and border in element size */
+    box-sizing: border-box;
+}
+
+html, body {
+    /* Set height to 100% for full viewport layout */
+    height: 100%;
+
+    /* Use the 'Roboto' sans-serif font for modern, clean typography */
+    font-family: Arial, sans-serif;
+}
+
+.wrapper {
+    /* Use a vertical flexbox layout */
+    display: flex;
+    flex-direction: column;
+
+    /* Ensure the wrapper covers at least the full height of the screen */
+    min-height: 100vh;
+}
+
+
+h2 {
+    /* Set a large font size for prominence */
+    font-size: 32px;
+
+    /* Add a bottom margin for spacing */
+    margin-bottom: 50px;
+
+    /* Use a dark teal color */
+    color: #003e3e;
+
+    /* Make the font bold and use a blended font stack for elegant styling */
+    font-weight: bold;
+    font-family: 'Alegreya', 'Roboto', sans-serif;
+}
+
+.main-content {
+    /* Allow the section to grow to fill space */
+    flex-grow: 1;
+
+    /* Add internal padding */
+    padding: 40px;
+
+    /* Center content both horizontally and vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Display items in a column direction */
+    flex-direction: column;
+
+    /* Center all text */
+    text-align: center;
+
+    /* Apply a full-screen background image */
+    background-image: url('../images/defineRole/index.png'); /* link to the image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps image still during scroll */
+}
+
+button {
+    /* Style with a teal green background and white text */
+    background-color: #A62B1F; /*— sets a bold red color.*/
+    color: white; /*— makes text stand out.*/
+
+    /* Remove borders and round the corners */
+    border: none;
+    border-radius: 12px; /*— creates rounded corners.*/
+
+    /* Use padding and set width */
+    padding: 10px 20px; /*— gives space inside the button.*/
+    width: 200px; /*— ensures consistent button width.*/
+
+    /* Add a top margin for spacing */
+    margin-top: 10px;
+
+    /* Enable pointer cursor and readable font size */
+    cursor: pointer; /*— shows a hand icon on hover.*/
+    font-size: 16px; /*— makes the text readable.*/
+
+    /* Smooth transition for the hover effect */
+    transition: background-color 0.3s ease;
+}
+
+/* On hover, change background color to bold red */
+button:hover {
+    background-color: #A62B1F; /** Retains the same red background to maintain branding.*/
+
+}
+
+/*
+    Admin Button (`.adminBtn`)
+
+    * Purpose: Provide a secondary button style for admin-specific actions.
+
+    * On Hover**:
+
+       Changes text color to `#A62B1F` for brand consistency while keeping the background same.
+*/
+.adminBtn {
+    /* Style with a teal green background and white text */
+    background-color: #f4f4f4; /*— uses a light grey background.*/
+    color: #333; /*— uses dark text for contrast.*/
+
+    /* Remove borders and round the corners */
+    border: none; /*— clean look.*/
+    border-radius: 12px;
+
+    /* Use padding and set width */
+    padding: 10px 0; /*— vertical padding only.*/
+    width: 110px; /* — smaller, compact width.*/
+
+    /* Add a top margin for spacing */
+    margin-top: 10px;
+
+    /* Enable pointer cursor and readable font size */
+    cursor: pointer; /* — indicates it's clickable.*/
+    font-size: 16px;
+    font-weight: bold; /*— emphasizes text.*/
+
+    /* Smooth transition for the hover effect */
+    /*transition: background-color 0.3s ease;*/
+}
+
+/* On hover, Changes text color to `#A62B1F` for brand consistency while keeping the background same. */
+.adminBtn:hover {
+    color: A62B1F;
+}
+
+
+
 /* 
 Global Reset (`*`)
 

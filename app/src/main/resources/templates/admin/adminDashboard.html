@@ -1,8 +1,74 @@
+<!DOCTYPE html>
 <!-- adminDashboard.html -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/assets/images/logo/logo.png}"/>
+    <title>Admin Dashboard</title>
 
-<!-- 
+    <link rel="stylesheet" href="../../static/assets/css/adminDashboard.css">
+    <link rel="stylesheet" href="../../static/assets/css/style.css">
+
+    <script src="../../static/js/render.js" defer></script>
+    <script src="../../static/js/util.js" defer></script>
+    <script src="../../static/js/components/header.js" defer></script>
+    <script src="../../static/js/components/footer.js" defer></script>
+</head>
+
+<!--<body onload="renderContent()">-->
+<body>
+<div class="container">
+    <div class="wrapper">
+        <div id="header"></div>
+        <main class="main-content">
+            <!-- Main page content -->
+            <input type="text" id="searchBar" class="searchBar"
+                                                  placeholder="Search Bar for custom output"/>
+            <div class="filter-wrapper">
+                <select class="filter-select" id="filterTime">
+                    <option value="">Sort by Time</option>
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                </select>
+                <select class="filter-select" id="filterSpecialty">
+                    <option value="">Filter by Specialty</option>
+                    <option value="Cardiologist">Cardiologist</option>
+                    <option value="Dermatologist">Dermatologist</option>
+                    <option value="Neurologist">Neurologist</option>
+                    <option value="Pediatrician">Pediatrician</option>
+                    <option value="Orthopedic">Orthopedic</option>
+                    <option value="Gynecologist">Gynecologist</option>
+                    <option value="Psychiatrist">Psychiatrist</option>
+                    <option value="Dentist">Dentist</option>
+                    <option value="Ophthalmologist">Ophthalmologist</option>
+                    <option value="Ent">ENT Specialist</option>
+                    <option value="Urologist">Urologist</option>
+                    <option value="Oncologist">Oncologist</option>
+                    <option value="Gastroenterologist">Gastroenterologist</option>
+                    <option value="General">General Physician</option>
+                </select>
+            </div>
+<!--            <button id="A-Role" type="button" onclick="Admin()">Admin role</button>
+            <button class="adminBtn" id="Admin-Role" type="button" onclick="Admin()">Admin role</button>-->
+
+            <div id="content"></div>
+        </main>
+        <div id="footer"></div>
+    </div>
+</div>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <div id="modal-body"></div>
+    </div>
+</div>
+<script type="module" src="../../static/js/adminDashboard.js" defer></script>
+<script type="module" src="../../static/js/doctorDashboard.js" defer></script>
+</body>
+
+<!--
 Step-by-Step Explanation of `adminDashboard.html`
-This file creates the Admin Dashboard interface for managing doctor-related data 
+This file creates the Admin Dashboard interface for managing doctor-related data
 with search, filter, and modal functionality.
 
 
@@ -24,7 +90,7 @@ with search, filter, and modal functionality.
 
 5. Set the Favicon
 
-   * Add a favicon for browser tabs using Thymeleaf pathing: 
+   * Add a favicon for browser tabs using Thymeleaf pathing:
      `<link rel="icon" type="image/png" th:href="@{/assets/images/logo/logo.png}" />`.
 
 6. Set the Page Title
@@ -99,11 +165,12 @@ with search, filter, and modal functionality.
     HINT:
         `<script type="module" src="../../static/js/adminDashboard.js" defer></script>`
         `<script type="module" src="../../static/js/doctorDashboard.js" defer></script>`
-        
-        
+
+
 20. Close the Body and HTML Tags
 
     * Finish the structure by properly closing all tags.
 
  -->
 
+</html>

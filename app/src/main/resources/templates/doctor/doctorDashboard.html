@@ -1,4 +1,102 @@
 <!-- doctorDashboard.html -->
+<!--This file defines the Doctor Dashboard interface, allowing doctors to view and manage their patient appointments, search records, and access patient prescriptions.-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" th:href="@{/assets/images/logo/logo.png}"/>
+    <title>Doctor Dashboard</title>
+
+    <link rel="stylesheet" href="../../static/assets/css/adminDashboard.css">
+    <link rel="stylesheet" href="../../static/assets/css/doctorDashboard.css">
+    <link rel="stylesheet" href="../../static/assets/css/style.css">
+
+    <script src="../../static/js/render.js" defer></script>
+    <script src="../../static/js/util.js" defer></script>
+    <script src="../../static/js/components/header.js" defer></script>
+    <script src="../../static/js/components/footer.js" defer></script>
+    <script src="../../static/js/components/patientRows.js" defer></script>
+    <script src="../../static/js/services/patientServices.js" defer></script>
+    <script src="../../static/js/doctorDashboard.js" defer></script>
+</head>
+
+<!--<body onload="renderContent()">-->
+<body>
+<div class="container">
+    <div class="wrapper">
+        <div id="header"></div>
+        <main class="main-content">
+            <!-- Main page content -->
+            <input type="text" id="searchBar" class="searchBar" placeholder="Search Bar for custom output"/>
+
+            <div class="filter-wrapper">
+                <button class="today-btn" id="today-btn" type="button" onclick="todo()">Today's</button>
+
+
+                <!--<label for="appointments_date">Date:</label>-->
+                <input class="date-picker" type="date" id="appointments_date" name="appointmentsDate">
+            </div>
+            <div class="patientTable">
+                <table id="patientTable">
+                    <thead class="table-header">
+                    <tr>
+                        <th >Patient ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Prescription</th>
+                        <th>P</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>P-1001</td>
+                        <td>John Doe</td>
+                        <td>+1 555-0192</td>
+                        <td>john.doe@example.com</td>
+                        <td>Amoxicillin 500mg</td>
+                        <td><button class="prescription-btn" id="prescription-btn" type="button" onclick="prescription()"></button></td>
+                    </tr>
+                    <tr>
+                        <td>P-1001</td>
+                        <td>John Doe</td>
+                        <td>+1 555-0192</td>
+                        <td>john.doe@example.com</td>
+                        <td>Amoxicillin 500mg</td>
+                        <td><button class="prescription-btn" id="prescription-btn" type="button" onclick="prescription()"></button></td>
+                    </tr>
+                    <tr>
+                        <td>P-1001</td>
+                        <td>John Doe</td>
+                        <td>+1 555-0192</td>
+                        <td>john.doe@example.com</td>
+                        <td>Amoxicillin 500mg</td>
+                        <td><button class="prescription-btn" id="prescription-btn" type="button" onclick="prescription()"></button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!--            <button id="A-Role" type="button" onclick="Admin()">Admin role</button>
+                        <button class="adminBtn" id="Admin-Role" type="button" onclick="Admin()">Admin role</button>-->
+
+            <div id="content"></div>
+        </main>
+        <div id="footer"></div>
+    </div>
+</div>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <div id="modal-body"></div>
+    </div>
+</div>
+<script type="module" src="../../static/js/adminDashboard.js" defer></script>
+<script type="module" src="../../static/js/doctorDashboard.js" defer></script>
+</body>
+
+</html>
 
 <!-- 
 Step-by-Step Explanation of `doctorDashboard.html`
