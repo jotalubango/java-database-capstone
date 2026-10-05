@@ -1,21 +1,20 @@
 /* 1. Define the `renderHeader` Function */
 /** The `renderHeader` function is responsible for rendering the entire header based on the user's session, role, and whether they are logged in.*/
 function renderHeader() {
-
-/*console.log("renderHeader - step 1");*/
   /* 2. Select the Header Div */
   /** The `headerDiv` variable retrieves the HTML element with the ID `header`, where the header content will be inserted.*/
   const headerDiv = document.getElementById("header");
 
   /* 3. Check if the Current Page is the Root Page */
   /** The `window.location.pathname` is checked to see if the current page is the root (`/`). If true, the user's session data (role) is removed from `localStorage`, and the header is rendered without any user-specific elements (just the logo and site title).*/
-   if (window.location.pathname.endsWith("/")) {
+   /*if (window.location.pathname.endsWith("/")) {*/ /* TODO: Verify this condition */
+   if (window.location.pathname.endsWith("/index.html")) {
      localStorage.removeItem("userRole");
      localStorage.removeItem("token");
      headerDiv.innerHTML = `
        <header class="header">
          <div class="logo-section">
-           <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+           <img src="./assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
            <span class="logo-title">Hospital CMS</span>
          </div>
        </header>`;
@@ -31,7 +30,7 @@ function renderHeader() {
   /** The `headerContent` variable is initialized with basic header HTML (logo section), to which additional elements will be added based on the user's role.*/
   let headerContent = `<header class="header">
      <div class="logo-section">
-        <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+        <img src="./assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
         <span class="logo-title">Hospital CMS</span>
       </div>
       <nav>`;
@@ -70,10 +69,8 @@ function renderHeader() {
       <a href="#" onclick="logoutPatient()">Logout</a>`;
   }
 
-
   /*9. Close the Header Section*/
   headerContent += `</nav></header>`;
-
 
   /* 10. Render the Header Content */
   /** Insert the dynamically generated `headerContent` into the `headerDiv` element.*/

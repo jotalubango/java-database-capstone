@@ -31,11 +31,13 @@
 </head>
 
 <body>
-<!-- 11. Main Container: Retém todos os elementos e applies global limits -->
-<!-- 12. Page Wrapper: * Inside the container, add a wrapper to group header, main, and footer sections logically. -->
+<!-- 11. Main Container -->
 <div class="container">
+    <!-- 12. Page Wrapper: * Inside the container, the wrapper groups header, main, and footer sections logically. -->
     <div class="wrapper">
+        <!--The header div-->
         <div id="header"></div>
+        <!--The main content-->
         <main class="main-content">
             <!-- Main page content -->
             <h2>Select Your Role</h2>
@@ -49,15 +51,18 @@
                 <button id="Patient-Role" type="button" onclick="Patient()">Patient role</button>
             </div>
         </main>
+        <!--The footer div-->
         <div id="footer"></div>
     </div>
 </div>
+<!--The modal div -->
 <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>
         <div id="modal-body"></div>
     </div>
 </div>
+<!--5 .	Include the JavaScript file at the end of or just before the tag to ensure the DOM is fully loaded.-->
 <script type="module" src="./js/services/index.js" defer></script>
 </body>
 

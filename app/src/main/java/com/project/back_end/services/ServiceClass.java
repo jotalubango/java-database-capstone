@@ -1,13 +1,21 @@
 package com.project.back_end.services;
 
-public class Service {
+import org.springframework.stereotype.Service;
+
 // 1. **@Service Annotation**
 // The @Service annotation marks this class as a service component in Spring. This allows Spring to automatically detect it through component scanning
 // and manage its lifecycle, enabling it to be injected into controllers or other services using @Autowired or constructor injection.
+@Service
+public class ServiceClass {
+
+    private final TokenService tokenService;
 
 // 2. **Constructor Injection for Dependencies**
 // The constructor injects all required dependencies (TokenService, Repositories, and other Services). This approach promotes loose coupling, improves testability,
 // and ensures that all required dependencies are provided at object creation time.
+    public ServiceClass(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
 // 3. **validateToken Method**
 // This method checks if the provided JWT token is valid for a specific user. It uses the TokenService to perform the validation.
@@ -61,6 +69,5 @@ public class Service {
 // - Depending on which filters (condition, doctor name) are provided, it delegates the filtering logic to PatientService.
 // - If no filters are provided, it retrieves all appointments for the patient.
 // This flexible method supports patient-specific querying and enhances user experience on the client side.
-
 
 }
