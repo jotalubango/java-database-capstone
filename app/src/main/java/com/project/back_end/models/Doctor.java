@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,14 +103,19 @@ public class Doctor {
      * //      - The @ElementCollection annotation ensures that the list of time slots is stored as a separate collection in the database.
      */
     @ElementCollection
-    private List<String> availableTimes;
+    @CollectionTable(
+            name = "doctor_available_time", // Custom table name (optional)
+            joinColumns = @JoinColumn(name = "doctor_id") // Foreign key (optional)
+    )
+    @Column(name = "available_time")
+    private List<String> availableTimes = new ArrayList<>();
 
     /**
      * //  Constructor(s):
      * //    - A no-argument constructor is implicitly provided, required by JPA for entity creation.
      * //    - A parameterized constructor can be added as needed.
      */
-    Doctor() {
+    public Doctor() {
     }
 
     public Doctor(Long id, String name, String specialty, String email, String password, String phone) {

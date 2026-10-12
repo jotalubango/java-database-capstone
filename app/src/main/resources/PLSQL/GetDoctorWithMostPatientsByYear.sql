@@ -19,7 +19,7 @@ BEGIN
     FROM
         cms.appointment a
     WHERE
-        EXTRACT(YEAR FROM a.appointment_time) = input_year
+        EXTRACT(YEAR FROM a.appointmentTime) = input_year
     GROUP BY
         a.doctor_id
     ORDER BY

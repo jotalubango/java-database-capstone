@@ -1,8 +1,11 @@
-
 package com.project.back_end.controllers;
 
 import com.project.back_end.DTO.Login;
+import com.project.back_end.models.Admin;
 import com.project.back_end.services.ServiceClass;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,29 +23,26 @@ public class AdminController {
 
     // Declare the dependency as final for immutability
     private final ServiceClass service;
-// 2. Autowire Service Dependency:
-//    - Use constructor injection to autowire the `Service` class.
-//    - The service handles core logic related to admin validation and token checking.
-//    - This promotes cleaner code and separation of concerns between the controller and business logic layer.
 
-    // Inject via constructor (@Autowired is optional in modern Spring)
+    // 2. Autowire Service Dependency:
+    //    - Use constructor injection to autowire the `Service` class.
+    //    - The service handles core logic related to admin validation and token checking.
+    //    - This promotes cleaner code and separation of concerns between the controller and business logic layer.
+    //    Inject via constructor (@Autowired is optional in modern Spring)
     public AdminController(ServiceClass service) {
         this.service = service;
     }
 
 
     // 3. Define the `adminLogin` Method:
-//    - Handles HTTP POST requests for admin login functionality.
-//    - Accepts an `Admin` object in the request body, which contains login credentials.
-//    - Delegates authentication logic to the `validateAdmin` method in the service layer.
-//    - Returns a `ResponseEntity` with a `Map` containing login status or messages.
+    //    - Handles HTTP POST requests for admin login functionality.
+    //    - Accepts an `Admin` object in the request body, which contains login credentials.
+    //    - Delegates authentication logic to the `validateAdmin` method in the service layer.
+    //    - Returns a `ResponseEntity` with a `Map` containing login status or messages.
     @PostMapping
-    Map<String, String> adminLogin(@RequestBody Login login) {
-
-        return Map.of();
+    public ResponseEntity<Map<String, String>> adminLogin(@RequestBody Admin admin) {
+        return service.validateAdmin(admin.getUsername(), admin.getPassword());
     }
-
-
 
 }
 

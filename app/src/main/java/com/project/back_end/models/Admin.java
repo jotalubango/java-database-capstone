@@ -55,11 +55,11 @@ public class Admin {
      * //    - A no-argument constructor is implicitly provided, required by JPA for entity creation.
      * //    - A parameterized constructor can be added as needed.
      */
-    Admin() {
+    public Admin() {
     }
 
-    public Admin(Long id, String username, String password) {
-        this.id = id;
+    public Admin(String username, String password) {
+        this.id = null;
         this.username = username;
         this.password = password;
     }

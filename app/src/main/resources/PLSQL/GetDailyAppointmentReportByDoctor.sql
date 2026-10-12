@@ -5,7 +5,7 @@ DROP FUNCTION IF EXISTS cms.getdailyappointmentreportbydoctor(date);
 CREATE OR REPLACE FUNCTION cms.getdailyappointmentreportbydoctor(
 	report_date date)
     RETURNS TABLE(  doctor_name character varying
-                  , appointment_time timestamp without time zone
+                  , appointmentTime timestamp without time zone
                   , status integer
                   , patient_name character varying
                   , patient_phone character varying
@@ -20,7 +20,7 @@ BEGIN
     RETURN QUERY
     SELECT
         d.name AS doctor_name,
-        a.appointment_time,
+        a.appointmentTime,
         a.status,
         p.name AS patient_name,
         p.phone AS patient_phone
@@ -31,9 +31,9 @@ BEGIN
     JOIN
         cms.patient p ON a.patient_id = p.id
     WHERE
-        a.appointment_time::date = report_date
+        a.appointmentTime::date = report_date
     ORDER BY
-        d.name, a.appointment_time;
+        d.name, a.appointmentTime;
 END;
 $BODY$;
 

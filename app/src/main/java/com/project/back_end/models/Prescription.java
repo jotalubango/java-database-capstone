@@ -44,7 +44,7 @@ public class Prescription {
      * //      - The @NotNull annotation ensures that the appointment ID is required for the prescription.
      */
     @NotNull(message = "The ID of the associated appointment cannot be null")
-    private String appointmentId;
+    private Long appointmentId;
 
     /**
      * // 4. 'medication' field:
@@ -106,11 +106,11 @@ public class Prescription {
         this.patientName = patientName;
     }
 
-    public String getAppointmentId() {
+    public Long getAppointmentId() {
         return appointmentId;
     }
 
-    public void setAppointmentId(String appointmentId) {
+    public void setAppointmentId(Long appointmentId) {
         this.appointmentId = appointmentId;
     }
 

@@ -124,7 +124,7 @@ public class Patient {
      * //    - A no-argument constructor is implicitly provided, required by JPA for entity creation.
      * //    - A parameterized constructor can be added as needed.
      */
-    Patient() {
+    public Patient() {
     }
 
     public Patient(Long id, String name, String email, String password, String phone, String address, LocalDate dateOfBirth, String emergencyContact, String insuranceProvider) {
@@ -190,6 +190,30 @@ public class Patient {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getEmergencyContact() {
+        return emergencyContact;
+    }
+
+    public void setEmergencyContact(String emergencyContact) {
+        this.emergencyContact = emergencyContact;
+    }
+
+    public String getInsuranceProvider() {
+        return insuranceProvider;
+    }
+
+    public void setInsuranceProvider(String insuranceProvider) {
+        this.insuranceProvider = insuranceProvider;
     }
 
     /**

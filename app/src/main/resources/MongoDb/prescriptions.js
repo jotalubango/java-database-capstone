@@ -1,4 +1,4 @@
-use prescriptions;
+use test
 
 db.prescriptions.insertMany([
   {

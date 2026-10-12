@@ -20,8 +20,8 @@ BEGIN
     FROM
         cms.appointment a
     WHERE
-        EXTRACT(MONTH FROM a.appointment_time) = input_month
-        AND EXTRACT(YEAR FROM a.appointment_time) = input_year
+        EXTRACT(MONTH FROM a.appointmentTime) = input_month
+        AND EXTRACT(YEAR FROM a.appointmentTime) = input_year
     GROUP BY
         a.doctor_id
     ORDER BY

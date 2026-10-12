@@ -31,7 +31,7 @@
 - id: INT, Primary Key, Auto Increment, _Represents the unique identifier for each appointment._
 - doctor_id: INT, NOT NULL, Foreign Key → doctors(id), _Represents the doctor assigned to this appointment._
 - patient_id: INT, NOT NULL, Foreign Key → patients(id), _Represents the patient assigned to this appointment._
-- appointment_time: DATETIME, NOT NULL, _Represents the date and time when the appointment is scheduled to occur._
+- appointmentTime: DATETIME, NOT NULL, _Represents the date and time when the appointment is scheduled to occur._
 - status: INT, NOT NULL, _Represents the current status of the appointment. (0 = Scheduled, 1 = Completed, 2 = Cancelled)_
 
 ### Table: Admins
