@@ -69,7 +69,7 @@ public class TokenService {
     // This method extracts the user's email (subject) from the provided JWT token.
     // - The token is first verified using the signing key to ensure it hasn’t been tampered with.
     // - After verification, the token is parsed, and the subject (which represents the email) is extracted.
-    // This method allows the application to retrieve the user's identity (email) from the token for further use.
+    // - This method allows the application to retrieve the user's identity (email) from the token for further use.
     public String extractEmail(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSigningKey())
@@ -98,7 +98,7 @@ public class TokenService {
 
             return switch (role.toLowerCase()) {
                 case "admin" -> adminRepository.findByUsername(email) != null;
-                case "doctor" -> doctorRepository.findByEmail(email) != null;
+                case "doctor" -> doctorRepository.findByEmailIgnoreCase(email) != null;
                 case "patient" -> patientRepository.findByEmail(email) != null;
                 default -> false;
             };
@@ -116,7 +116,7 @@ public class TokenService {
 
             return switch (role.toLowerCase()) {
                 case "admin" -> Objects.equals(adminRepository.findByUsername(email).getId(), entityId);
-                case "doctor" -> Objects.equals(doctorRepository.findByEmail(email).getId(), entityId);
+                case "doctor" -> Objects.equals(doctorRepository.findByEmailIgnoreCase(email).getId(), entityId);
                 case "patient" -> Objects.equals(patientRepository.findByEmail(email).getId(), entityId);
                 default -> false;
             };
@@ -125,7 +125,7 @@ public class TokenService {
             return false;
         }
     }
-    public Long getIdFromTokenAndRole(String token, String role) {
+    public Long validateTokenGetId(String token, String role) {
         try {
             if(token == null || role == null)
                 return null;
@@ -135,7 +135,7 @@ public class TokenService {
 
             return switch (role.toLowerCase()) {
                 case "admin" -> adminRepository.findByUsername(email).getId();
-                case "doctor" -> doctorRepository.findByEmail(email).getId();
+                case "doctor" -> doctorRepository.findByEmailIgnoreCase(email).getId();
                 case "patient" -> patientRepository.findByEmail(email).getId();
                 default -> null;
             };

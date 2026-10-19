@@ -1,18 +1,24 @@
 package com.project.back_end.services;
 
 import com.project.back_end.DTO.AppointmentDTO;
-import com.project.back_end.DTO.PatientDTO;
 import com.project.back_end.exception.InternalServerException;
+import com.project.back_end.exception.UnauthorizedException;
+import com.project.back_end.exception.ValidationException;
+import com.project.back_end.exception.ValidationFailed;
 import com.project.back_end.models.Appointment;
+import com.project.back_end.models.Doctor;
 import com.project.back_end.models.Patient;
 import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.repo.PatientRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 // 1. **Add @Service Annotation**:
 //    - The `@Service` annotation is used to mark this class as a Spring service component.
@@ -39,13 +45,16 @@ public class PatientService {
 
     // 3. **createPatient Method**:
     //    - Creates a new patient in the database. It saves the patient object using the `PatientRepository`.
-    //    - If the patient is successfully saved, the method returns `1`; otherwise, it logs the error and returns `0`.
+    //    - If the patient is successfully saved, the method returns the new patient object; otherwise, it logs the error and throws an exception.
     //    - Instruction: Ensure that error handling is done properly and exceptions are caught and logged appropriately.
     @Transactional
-    public int createPatient(Patient patient) {
+    public Patient createPatient(Patient patient) {
+        Patient verifyExistence = patientRepository.findByEmail(patient.getEmail());
+        if (verifyExistence != null) {
+            throw new ValidationException("Patient with this email already exists. " + patient.getEmail());
+        }
         try {
-            patientRepository.save(patient);
-            return 1;
+            return patientRepository.save(patient);
         } catch (Exception e) {
             logger.error("Error occurred while creating patient: {}", e.getMessage(), e);
             throw new InternalServerException(e.getMessage());
@@ -58,7 +67,7 @@ public class PatientService {
     //    - This method is marked as `@Transactional` to ensure database consistency during the transaction.
     //    - Instruction: Ensure that appointment data is properly converted into DTOs and the method handles errors gracefully.
     @Transactional
-    List<AppointmentDTO> getPatientAppointment(Long patientId) {
+    public List<AppointmentDTO> getPatientAppointment(Long patientId) {
         try {
             List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
             return ServiceClass.transformListOfAppointmentIntoListOfAppointmentDTO(appointments);
@@ -74,7 +83,7 @@ public class PatientService {
     //    - Converts the appointments into `AppointmentDTO` and returns them in the response.
     //    - Instruction: Ensure the method correctly handles "past" and "future" conditions, and that invalid conditions are caught and returned as errors.
     @Transactional
-    List<AppointmentDTO> filterByCondition(Long patientId, int status) {
+    public List<AppointmentDTO> filterByCondition(Long patientId, int status) {
         try {
             List<Appointment> appointments = appointmentRepository.findByPatient_IdAndStatusOrderByAppointmentTimeAsc(patientId, status);
             return ServiceClass.transformListOfAppointmentIntoListOfAppointmentDTO(appointments);
@@ -121,16 +130,40 @@ public class PatientService {
     //    - It returns the patient's information in the response body.
     //    - Instruction: Make sure that the token extraction process works correctly and patient details are fetched properly based on the extracted email.
     @Transactional
-    PatientDTO getPatientDetails(String token) {
+    public Patient getPatientDetails(String token) {
+        String email = tokenService.extractEmail(token);
+        if (email == null) {
+            throw new UnauthorizedException("Invalid or expired token");
+        }
         try {
-            String email = tokenService.extractEmail(token);
-            Patient patient = patientRepository.findByEmail(email);
-            return new PatientDTO(patient);
+            return patientRepository.findByEmail(email);
         } catch (Exception e) {
             logger.error("Error occurred while calling repository: {}", e.getMessage(), e);
             throw new InternalServerException(e.getMessage());
         }
     }
+
+    // 9. **validatePatient Method**:
+    //    - Validates a patient's login by checking if the email and password match an existing doctor record.
+    //    - It generates a token for the doctor if the login is successful, otherwise returns an error message.
+    //    - Instruction: Make sure to handle invalid login attempts and password mismatches properly with error responses.
+    @Transactional
+    public ResponseEntity<Map<String, String>> validatePatient(String email, String password) {
+        try {
+            Patient patient = patientRepository.findByEmail(email);
+            if (patient == null) { // No patient found
+                return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Invalid username or password");
+            }
+            if (!patient.getPassword().equals(password)) { // Invalid password.
+                return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Invalid username or password");
+            }
+            String token = tokenService.generateToken(email);
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (Exception e) {
+            return ValidationFailed.buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred: " + e.getMessage());
+        }
+    }
+
 
     // 9. **Handling Exceptions and Errors**:
     //    - The service methods handle exceptions using try-catch blocks and log any issues that occur. If an error occurs during database operations, the service responds with appropriate HTTP status codes (e.g., `500 Internal Server Error`).

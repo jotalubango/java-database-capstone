@@ -26,7 +26,8 @@ INSERT INTO cms.doctor (email, name, password, phone, specialty) VALUES
 ('dr.evans@example.com', 'Dr. Lucas Evans', 'evansEv1', '555-222-3334', 'Neurologist'),
 ('dr.turner@example.com', 'Dr. Grace Turner', 'turnerBurner', '555-333-4445', 'Orthopedist'),
 ('dr.hill@example.com', 'Dr. Ethan Hill', 'hillclimb', '555-444-5556', 'Pediatrician'),
-('dr.ward@example.com', 'Dr. Ruby Ward', 'wardWard', '555-555-6667', 'Dermatologist');
+('dr.ward@example.com', 'Dr. Ruby Ward', 'wardWard', '555-555-6667', 'Dermatologist'),
+('dr.can@example.com', 'Dr. Can be deleted because has no appointments', 'cancan', '555-555-6667', 'Dermatologist');
 
 INSERT INTO cms.patient (address, email, name, password, phone) VALUES
 ('101 Oak St, Cityville', 'jane.doe@example.com', 'Jane Doe', 'passJane1', '888-111-1111'),

@@ -1,7 +1,7 @@
 package com.project.back_end.mvc;
 
+import com.project.back_end.DTO.Login;
 import com.project.back_end.controllers.AdminController;
-import com.project.back_end.models.Admin;
 import com.project.back_end.services.ServiceClass;
 import com.project.back_end.services.TokenService;
 import org.junit.jupiter.api.Test;
@@ -38,11 +38,11 @@ class DashboardControllerTest {
         assumeTrue(isControllerTestsEnabled, "Skipping test if controller.tests.enabled.property is false");
         {
             // Test: Happy path - valid admin user
-            Admin admin = new Admin();
-            admin.setUsername("admin");
-            admin.setPassword("admin@1234");
+            Login login = new Login();
+            login.setUsername("admin");
+            login.setPassword("admin@1234");
 
-            ResponseEntity<Map<String, String>> response = adminController.adminLogin(admin);
+            ResponseEntity<Map<String, String>> response = adminController.adminLogin(login);
             assertNotNull(response.getBody());
             String token = response.getBody().get("token");
 
@@ -53,11 +53,11 @@ class DashboardControllerTest {
         }
         {
             // Test: Invalid admin user
-            Admin admin = new Admin();
-            admin.setUsername("admin");
-            admin.setPassword("BlaBla");
+            Login login = new Login();
+            login.setUsername("admin");
+            login.setPassword("BlaBla");
 
-            ResponseEntity<Map<String, String>> response = adminController.adminLogin(admin);
+            ResponseEntity<Map<String, String>> response = adminController.adminLogin(login);
             assertNotNull(response.getBody());
             String token = response.getBody().get("token");
 

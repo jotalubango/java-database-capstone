@@ -1,7 +1,8 @@
 package com.project.back_end.services;
 
 import com.project.back_end.exception.InternalServerException;
-import com.project.back_end.exception.UnauthorizedException;
+import com.project.back_end.exception.ValidationException;
+import com.project.back_end.exception.ValidationFailed;
 import com.project.back_end.models.Appointment;
 import com.project.back_end.models.Doctor;
 import com.project.back_end.repo.AppointmentRepository;
@@ -56,71 +57,61 @@ public class DoctorService {
     //    - The method fetches all appointments for the doctor on the given date and calculates the availability by comparing against booked slots.
     //    - Instruction: Ensure that the time slots are properly formatted and the available slots are correctly filtered.
     public List<String> getDoctorAvailability(Long doctorId, LocalDate date) {
-        try {
-            Optional<Doctor> doctorOpt = doctorRepository.findById(doctorId);
-            if (doctorOpt.isEmpty()) {
-                throw new EntityNotFoundException("Doctor not found.");
-            }
-            List<String> availableTimes = doctorOpt.get().getAvailableTimes();
-            // Define the start and end boundary of the target day
-            LocalDateTime startOfDay = date.atStartOfDay();
-            LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
-            // Fetch appointments filtered by doctor and date range
-            List<Appointment> appointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(
-                    doctorId,
-                    startOfDay,
-                    endOfDay
-            );
-            List<String> availableTimeSlots = new ArrayList<>();
-            for (String timeSlot : availableTimes) {
-                String ini = (timeSlot.split("-"))[0]; // if time Slot is "09:00-10:00" then returns the initial time "09:00"
-                //
-                //  verifies if the initial time of the period is in the list of appointment's appointmentTime
-                //  if it is, then this element of the list is not available (must be excluded)
-                boolean available = true;
-                for (Appointment apt : appointments) {
-                    String startTime_HH_mm = apt.getAppointmentTime().format(DateTimeFormatter.ofPattern("HH:mm"));
-                    if (ini.equals(startTime_HH_mm)) {
-                        available = false;
-                    }
-
-                }
-                if (available) {
-                    availableTimeSlots.add(timeSlot);
-                }
-            }
-            return availableTimeSlots;
-        } catch (Exception e) {
-            logger.error("Error occurred while calling repository: {}", e.getMessage(), e);
-            throw new InternalServerException(e.getMessage());
+        Optional<Doctor> doctorOpt = doctorRepository.findById(doctorId);
+        if (doctorOpt.isEmpty()) {
+            throw new EntityNotFoundException("Doctor not found.");
         }
+        List<String> availableTimes = doctorOpt.get().getAvailableTimes();
+        // Define the start and end boundary of the target day
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+        // Fetch appointments filtered by doctor and date range
+        List<Appointment> appointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(
+                doctorId,
+                startOfDay,
+                endOfDay
+        );
+        List<String> availableTimeSlots = new ArrayList<>();
+        for (String timeSlot : availableTimes) {
+            String ini = (timeSlot.split("-"))[0]; // if time Slot is "09:00-10:00" then returns the initial time "09:00"
+            //
+            //  verifies if the initial time of the period is in the list of appointment's appointmentTime
+            //  if it is, then this element of the list is not available (must be excluded)
+            boolean available = true;
+            for (Appointment apt : appointments) {
+                String startTime_HH_mm = apt.getAppointmentTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+                if (ini.equals(startTime_HH_mm)) {
+                    available = false;
+                }
+
+            }
+            if (available) {
+                availableTimeSlots.add(timeSlot);
+            }
+        }
+        return availableTimeSlots;
     }
 
     // 5. **saveDoctor Method**:
     //    - Used to save a new doctor record in the database after checking if a doctor with the same email already exists.
-    //    - If a doctor with the same email is found, it returns `-1` to indicate conflict; `1` for success, and `0` for internal errors.
+    //    - If a doctor with the same email is found, it throws an error with a describing message to indicate conflict
     //    - Instruction: Ensure that the method correctly handles conflicts and exceptions when saving a doctor.
-    public int saveDoctor(Doctor doctor) {
-        try {
-            doctorRepository.save(doctor);
-            return 1;
-        } catch (Exception e) {
-            logger.error("Error occurred while creating doctor: {}", e.getMessage(), e);
-            throw new InternalServerException(e.getMessage());
+    public Doctor saveDoctor(Doctor doctor) {
+        Doctor verifyExistence = doctorRepository.findByEmailIgnoreCase(doctor.getEmail());
+        if (verifyExistence != null) {
+            throw new ValidationException("Doctor with this email already exists. " + doctor.getEmail());
         }
+        return doctorRepository.save(doctor);
     }
 
     // 6. **updateDoctor Method**:
-    //    - Updates an existing doctor's details in the database. If the doctor doesn't exist, it returns `-1`.
+    //    - Updates an existing doctor's details in the database. If the doctor doesn't exist, it throws an ValidationException .
     //    - Instruction: Make sure that the doctor exists before attempting to save the updated record and handle any errors properly.
-    public int updateDoctor(Doctor doctor) {
+    public Doctor updateDoctor(Doctor doctor) {
+        doctorRepository.findById(doctor.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Unable to update doctor. Doctor does not exist."));
         try {
-            Optional<Doctor> opt = doctorRepository.findById(doctor.getId());
-            if (opt.isEmpty()) {
-                return -1;
-            }
-            doctorRepository.save(doctor);
-            return 1;
+            return doctorRepository.save(doctor);
         } catch (Exception e) {
             logger.error("Error occurred while updating doctor: {}", e.getMessage(), e);
             throw new InternalServerException(e.getMessage());
@@ -131,7 +122,7 @@ public class DoctorService {
     //    - Fetches all doctors from the database. It is marked with `@Transactional` to ensure that the collection is properly loaded.
     //    - Instruction: Ensure that the collection is eagerly loaded, especially if dealing with lazy-loaded relationships (e.g., available times).
     @Transactional
-    protected List<Doctor> getDoctors() {
+    public List<Doctor> getDoctors() {
         try {
             return doctorRepository.findAll();
         } catch (Exception e) {
@@ -142,17 +133,19 @@ public class DoctorService {
 
     // 8. **deleteDoctor Method**:
     //    - Deletes a doctor from the system along with all appointments associated with that doctor.
-    //    - It first checks if the doctor exists. If not, it returns `-1`; otherwise, it deletes the doctor and their appointments.
+    //    - It first checks if the doctor exists. If not, it returns error; otherwise, it deletes the doctor and their appointments.
     //    - Instruction: Ensure the doctor and their appointments are deleted properly, with error handling for internal issues.
     @Transactional
-    public int deleteDoctor(Doctor doctor) {
+    public void deleteDoctor(Long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId).
+                orElseThrow(() -> new EntityNotFoundException("Unable to delete doctor. Doctor does not exist."));
+
+        long appointmentCount = appointmentRepository.countByDoctorId(doctorId);
+        if (appointmentCount > 0) {
+            throw new IllegalStateException("Cannot delete doctor with existing appointments.");
+        }
         try {
-            Optional<Doctor> opt = doctorRepository.findById(doctor.getId());
-            if (opt.isEmpty()) {
-                return -1;
-            }
             doctorRepository.delete(doctor);
-            return 1;
         } catch (Exception e) {
             logger.error("Error occurred while deleting doctors: {}", e.getMessage(), e);
             throw new InternalServerException(e.getMessage());
@@ -166,18 +159,17 @@ public class DoctorService {
     @Transactional
     public ResponseEntity<Map<String, String>> validateDoctor(String email, String password) {
         try {
-            Doctor doctor = doctorRepository.findByEmail(email);
+            Doctor doctor = doctorRepository.findByEmailIgnoreCase(email);
             if (doctor == null) { // No admin found
-                throw new UnauthorizedException("Invalid username or password");
+                return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Invalid username or password");
             }
             if (!doctor.getPassword().equals(password)) { // Invalid password.
-                throw new UnauthorizedException("Invalid username or password");
+                return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Invalid username or password");
             }
             String token = tokenService.generateToken(email);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(Map.of("token", token));
+            return ResponseEntity.ok(Map.of("token", token));
         } catch (Exception e) {
-            throw new InternalServerException("An unexpected error occurred: " + e.getMessage());
+            return ValidationFailed.buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred: " + e.getMessage());
         }
     }
 
@@ -185,7 +177,7 @@ public class DoctorService {
     //    - Finds doctors based on partial name matching and returns the list of doctors with their available times.
     //    - This method is annotated with `@Transactional` to ensure that the database query and data retrieval are properly managed within a transaction.
     //    - Instruction: Ensure that available times are eagerly loaded for the doctors.
-    protected  List<Doctor> findDoctorByName(String doctorName) {
+    public List<Doctor> findDoctorByName(String doctorName) {
         try {
             return doctorRepository.findByNameLike(doctorName);
         } catch (Exception e) {
@@ -198,7 +190,7 @@ public class DoctorService {
     //    - Filters doctors based on their name, specialty, and availability during a specific time (AM/PM).
     //    - The method fetches doctors matching the name and specialty criteria, then filters them based on their availability during the specified time period.
     //    - Instruction: Ensure proper filtering based on both the name and specialty as well as the specified time period.
-    protected List<Doctor> filterDoctorsByNameSpecialtyAndTime(String doctorName, String specialty, String indicatorAmOrPm) {
+    public List<Doctor> filterDoctorsByNameSpecialtyAndTime(String doctorName, String specialty, String indicatorAmOrPm) {
         try {
             List<Doctor> doctors = doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(doctorName, specialty);
             return filterDoctorListByTimeAmPm(indicatorAmOrPm, doctors);

@@ -28,22 +28,21 @@ import java.util.Objects;
 @Service
 public class AppointmentService {
     // 2. **Constructor Injection for Dependencies**:
-    //    - The `AppointmentService` class requires several dependencies like `AppointmentRepository`, `Service`, `TokenService`, `PatientRepository`, and `DoctorRepository`.
+    //    - The `AppointmentService` class requires several dependencies like `AppointmentRepository`, `Service`, `PatientRepository`, and `DoctorRepository`.
     //    - These dependencies should be injected through the constructor.
     //    - Instruction: Ensure constructor injection is used for proper dependency management in Spring.
+    //    - token validation is done in the controller layer, leaving the service Layer focus on business logic.
     // 3. **Add @Transactional Annotation for Methods that Modify Database**:
     //    - The methods that modify or update the database should be annotated with `@Transactional` to ensure atomicity and consistency of the operations.
     //    - Instruction: Add the `@Transactional` annotation above methods that interact with the database, especially those modifying data.
     private final AppointmentRepository appointmentRepository;
     private final ServiceClass service;
-    private final TokenService tokenService;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
 
-    public AppointmentService(AppointmentRepository appointmentRepository, ServiceClass service, TokenService tokenService, PatientRepository patientRepository, DoctorRepository doctorRepository) {
+    public AppointmentService(AppointmentRepository appointmentRepository, ServiceClass service, PatientRepository patientRepository, DoctorRepository doctorRepository) {
         this.appointmentRepository = appointmentRepository;
         this.service = service;
-        this.tokenService = tokenService;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
     }
@@ -147,12 +146,12 @@ public class AppointmentService {
         if (!Objects.equals(appointmentDTO.getPatientId(), appointment.getPatient().getId())) {
             throw new ValidationException("The patient in the appointment is not the same as the specified. Cannot change the appointment's patient.");
         }
-        // Not the same Doctor (Why would it be so! Just in case we validate)
+        // Not the same Doctor (Why would it be! Just in case we validate)
         if (!Objects.equals(appointmentDTO.getDoctorId(), appointment.getDoctor().getId())) {
-            throw new ValidationException("The doctor in the appointment is not the sme as the specified. Cannot change the appointment's doctor.");
+            throw new ValidationException("The doctor in the appointment is not the same as the specified. Cannot change the appointment's doctor.");
         }
         if (appointmentDTO.getStatus() == 1) {
-            throw new ValidationException("Unable to update the schedule time in a completed appointment.");
+            throw new ValidationException("Unable to update the appointment time in a completed appointment.");
         }
         if (!appointmentDTO.getAppointmentTime().equals(appointment.getAppointmentTime())) {
             // Trying to update the appointment time => check doctor's availability
@@ -175,14 +174,13 @@ public class AppointmentService {
     //    - Instruction: Make sure that the method checks for the patient ID match before deleting the appointment.
     @Transactional
     @Modifying
-    public int cancelAppointment(String token, Long appointmentId) {
+    public int cancelAppointment(Long appointmentId, Long patientIdTryingToDelete) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
 
-        if (!tokenService.validateToken(token, "patient", appointment.getPatient().getId())) {
-            throw new UnauthorizedException("Cannot cancel appointment. Only the patient who owns the appointment can cancel it.");
+        if (!patientIdTryingToDelete.equals(appointment.getPatient().getId())) {
+            throw new UnauthorizedException("This patient does not owns the appointment.");
         }
-
         if (appointment.getStatus() != 0) {
             throw new ValidationException("Cannot cancel a completed appointment.");
         }
@@ -229,5 +227,14 @@ public class AppointmentService {
         } catch (Exception ex) {
             throw new InternalServerException(ex.getMessage());
         }
+    }
+
+    // 8. ** Get Doctor Availability in a date**:
+    //    - This method gets a list of time slots available for a specific doctor in a given date
+    //    - If the list is empty means that the doctor is not available ate the specified date
+    public List<String> getDoctorAvailability(Long doctorId, LocalDate date) {
+        // TODO
+        //  Get the list of time slots available for a specific doctor in a given date
+        return List.of("09:00-10:00", "13:14");
     }
 }

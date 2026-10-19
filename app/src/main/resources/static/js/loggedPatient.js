@@ -6,16 +6,18 @@ import { bookAppointment } from './services/appointmentRecordService.js';
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadDoctorCards();
+  loadDoctorCards_();
 });
 
-function loadDoctorCards() {
-  getDoctors()
-    .then(doctors => {
+async function loadDoctorCards_() {
+  await getDoctors()
+    .then( resultData => {
       const contentDiv = document.getElementById("content");
       contentDiv.innerHTML = "";
 
-      doctors.forEach(doctor => {
+      const doctorList = resultData.doctors;           // { "doctors" : [ { }, { },  ... ]}
+
+      doctorList.forEach(doctor => {
         const card = createDoctorCard(doctor);
         contentDiv.appendChild(card);
       });

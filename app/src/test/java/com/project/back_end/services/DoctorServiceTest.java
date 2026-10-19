@@ -8,16 +8,16 @@ class DoctorServiceTest {
 
     @Test
     void getDoctorAvailability() {
-        // TODO
+        //  Tested through controller
     }
 
     @Test
     void getDoctors() {
-        // TODO
+        //  Tested through controller
     }
 
     @Test
     void filterDoctorsByTime() {
-        // TODO
+        //  Tested through controller
     }
 }

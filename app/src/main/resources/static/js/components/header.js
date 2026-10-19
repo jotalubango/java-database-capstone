@@ -30,7 +30,7 @@ function renderHeader() {
   /** The `headerContent` variable is initialized with basic header HTML (logo section), to which additional elements will be added based on the user's role.*/
   let headerContent = `<header class="header">
      <div class="logo-section">
-        <img src="./assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+        <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
         <span class="logo-title">Hospital CMS</span>
       </div>
       <nav>`;
@@ -86,11 +86,11 @@ function renderHeader() {
 
   /*13. **attachHeaderButtonListeners**: Adds event listeners to login buttons for "Doctor" and "Admin" roles. If clicked, it opens the respective login modal.*/
   function attachHeaderButtonListeners() {
-    const doctorLoginBtn = document.getElementById("doctor-login-btn");
-    const adminLoginBtn = document.getElementById("admin-login-btn");
+    const doctorLoginBtn = document.getElementById("doctorLoginBtn");
+    const adminLoginBtn = document.getElementById("adminLoginBtn");
 
-    const doctorModal = document.getElementById("doctor-login-modal");
-    const adminModal = document.getElementById("admin-login-modal");
+    const doctorModal = document.getElementById("doctorLogin");
+    const adminModal = document.getElementById("adminLogin");
 
     if (doctorLoginBtn && doctorModal) {
       doctorLoginBtn.addEventListener("click", () => {
@@ -103,6 +103,16 @@ function renderHeader() {
         adminModal.style.display = "block";
       });
     }
+
+    // TODO: added by jp
+/*      const addDocBtn = document.getElementById('addDocBtn');
+      if(addDocBtn){
+         addDocBtn.addEventListener('click', () => {
+           openModal('addDoctor');
+         });
+      }*/
+
+
   }
 
   /*14. **logout**: Removes user session data and redirects the user to the root page.*/
@@ -177,7 +187,7 @@ function renderHeader() {
          headerDiv.innerHTML = `
            <header class="header">
              <div class="logo-section">
-               <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+               <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
                <span class="logo-title">Hospital CMS</span>
              </div>
            </header>`;
@@ -199,7 +209,7 @@ function renderHeader() {
        ```javascript
        let headerContent = `<header class="header">
          <div class="logo-section">
-           <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+           <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
            <span class="logo-title">Hospital CMS</span>
          </div>
          <nav>`;

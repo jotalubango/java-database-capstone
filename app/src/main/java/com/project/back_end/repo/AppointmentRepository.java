@@ -69,7 +69,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Modifying
     @Transactional
     @Query("DELETE FROM Appointment AS a WHERE a.doctor.id = :doctorId")
-    int deleteAllByDoctorId(@Param("doctorId")Long doctorId);
+    int deleteAllByDoctorId(@Param("doctorId") Long doctorId);
 
     // - **findByPatientId**:
     //   - This method retrieves all appointments for a specific patient.
@@ -93,7 +93,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             "AND LOWER(a.doctor.name) LIKE LOWER(CONCAT('%',:doctorName,'%')) " +
             "ORDER BY a.appointmentTime ASC")
     List<Appointment> filterByDoctorNameAndPatientId(
-            @Param("doctorName")String doctorName,
+            @Param("doctorName") String doctorName,
             @Param("patientId") Long patientId);
 
     // - **filterByDoctorNameAndPatientIdAndStatus**:
@@ -107,7 +107,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             "AND a.status = :status " +
             "ORDER BY a.appointmentTime ASC")
     List<Appointment> filterByDoctorNameAndPatientIdAndStatus(
-            @Param("doctorName")String doctorName,
+            @Param("doctorName") String doctorName,
             @Param("patientId") Long patientId,
             @Param("status") int status);
 
@@ -128,7 +128,15 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             "LEFT JOIN FETCH a.doctor d " +
             "WHERE LOWER(a.doctor.name) LIKE LOWER(CONCAT('%',:doctorName,'%')) " +
             "ORDER BY a.appointmentTime ASC")
-    List<Appointment> filterByDoctorName(@Param("doctorName")String doctorName);
+    List<Appointment> filterByDoctorName(@Param("doctorName") String doctorName);
+
+    // - **countByDoctorId**:
+    //   - This method retrieves the number of appointments based on a doctor id
+    //   - Return type: Long
+    //   - Parameters: String doctorId
+    @Query("SELECT count(a) FROM Appointment a " +
+            "WHERE a.doctor.id = :doctorId ")
+    Long countByDoctorId(@Param("doctorId") Long doctorId);
 
     // 3. @Modifying and @Transactional annotations:
     //    - The @Modifying annotation is used to indicate that the method performs a modification operation (like DELETE or UPDATE).

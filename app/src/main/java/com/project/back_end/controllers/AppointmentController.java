@@ -8,14 +8,13 @@ import com.project.back_end.models.Appointment;
 import com.project.back_end.services.AppointmentService;
 import com.project.back_end.services.ServiceClass;
 import com.project.back_end.services.TokenService;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 // 1. Set Up the Controller Class:
 //    - Annotate the class with `@RestController` to define it as a REST API controller.
@@ -44,17 +43,20 @@ public class AppointmentController {
     //    - First validates the token for role `"doctor"` using the `Service`.
     //    - If the token is valid, returns appointments for the given patient on the specified date.
     //    - If the token is invalid or expired, responds with the appropriate message and status code.
-    @GetMapping
+    @GetMapping("{date}/{patientName}/{token}")
     public ResponseEntity<?> getAppointments(
-            @PathVariable("patientName") String patientName,
             @PathVariable("date") LocalDate date,
+            @PathVariable("patientName") String patientName,
             @PathVariable("token") String token
     ) {
-        Long doctorId = tokenService.getIdFromTokenAndRole(token, "doctor");
+        Long doctorId = tokenService.validateTokenGetId(token, "doctor");
         if (doctorId == null) {
             return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Invalid or expired token");
         }
-        List<Appointment> appointments = appointmentService.getAppointments(doctorId, date, patientName);
+        List<Appointment> appointments = appointmentService.getAppointments(
+                doctorId,
+                date,
+                patientName.equalsIgnoreCase("null")?"":patientName);
         return ResponseEntity.ok(appointments);
     }
 
@@ -64,12 +66,12 @@ public class AppointmentController {
 //    - Validates the token for the `"patient"` role.
 //    - Uses service logic to validate the appointment data (e.g., check for doctor availability and time conflicts).
 //    - Returns success if booked, or appropriate error messages if the doctor ID is invalid or the slot is already taken.
-    @PostMapping
+    @PostMapping("{token}")
     public ResponseEntity<?> bookAppointment(
             @RequestBody AppointmentCreateDTO appointmentCreateDTO,
             @PathVariable("token") String token) {
         //    - Validates the token for the `"patient"` role.
-        Long patientId = tokenService.getIdFromTokenAndRole(token, "patient");
+        Long patientId = tokenService.validateTokenGetId(token, "patient");
         if (patientId == null) {
             return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Invalid or expired token");
         }
@@ -107,12 +109,12 @@ public class AppointmentController {
     //    - Validates the token for `"patient"` role.
     //    - Delegates the update logic to the `AppointmentService`.
     //    - Returns an appropriate success or failure response based on the update result.
-    @PutMapping
+    @PutMapping("{token}")
     public ResponseEntity<?> updateAppointment(
             @RequestBody AppointmentCreateDTO appointmentCreateDTO,
             @PathVariable("token") String token) {
         //    - Validates the token for the `"patient"` role.
-        Long patientId = tokenService.getIdFromTokenAndRole(token, "patient");
+        Long patientId = tokenService.validateTokenGetId(token, "patient");
         if (patientId == null) {
             return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Invalid or expired token");
         }
@@ -150,19 +152,19 @@ public class AppointmentController {
     //    - Accepts the appointment ID and a token as path variables.
     //    - Validates the token for `"patient"` role to ensure the user is authorized to cancel the appointment.
     //    - Calls `AppointmentService` to handle the cancellation process and returns the result.
-    @DeleteMapping
+    @DeleteMapping("{appointmentId}/{token}")
+    @Modifying
     public ResponseEntity<?> cancelAppointment(
-            @PathVariable Long appointmentId,
+            @PathVariable("appointmentId") Long appointmentId,
             @PathVariable("token") String token) {
         //    - Validates the token for the `"patient"` role.
-        Long patientId = tokenService.getIdFromTokenAndRole(token, "patient");
-        if (patientId == null) {
+        Long patientIdTryingToDelete = tokenService.validateTokenGetId(token, "patient");
+        if (patientIdTryingToDelete == null) {
             return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Invalid or expired token");
         }
-
         //    - Uses service logic to validate the appointment data (e.g., check for doctor availability and time conflicts).
 
-        int result = appointmentService.cancelAppointment(token, appointmentId);
+        int result = appointmentService.cancelAppointment(appointmentId, patientIdTryingToDelete);
 
         //  - Returns success if updated, or appropriate error messages if the doctor ID is invalid or the slot is already taken.
         //  - Errors are thrown inside the method updateAppointment, and handled by @RestControllerAdvice Class: ValidationFailed

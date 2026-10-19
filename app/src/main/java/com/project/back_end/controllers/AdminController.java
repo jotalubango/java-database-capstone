@@ -1,10 +1,7 @@
 package com.project.back_end.controllers;
 
 import com.project.back_end.DTO.Login;
-import com.project.back_end.models.Admin;
 import com.project.back_end.services.ServiceClass;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,8 +37,8 @@ public class AdminController {
     //    - Delegates authentication logic to the `validateAdmin` method in the service layer.
     //    - Returns a `ResponseEntity` with a `Map` containing login status or messages.
     @PostMapping
-    public ResponseEntity<Map<String, String>> adminLogin(@RequestBody Admin admin) {
-        return service.validateAdmin(admin.getUsername(), admin.getPassword());
+    public ResponseEntity<Map<String, String>> adminLogin(@RequestBody Login login) {
+        return service.validateAdmin(login.getUsername(), login.getPassword());
     }
 
 }

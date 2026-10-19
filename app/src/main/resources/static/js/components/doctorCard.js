@@ -26,25 +26,25 @@ export function createDoctorCard(doctor) {
     const name = document.createElement("h3");
     name.textContent = doctor.name;
 
-    /*Create and set the doctor's specialization*/
-    const specialization = document.createElement("h3");
-    specialization.textContent = doctor.specialization;
+    /*Create and set the doctor's specialty*/
+    const specialty = document.createElement("h3");
+    specialty.textContent = doctor.specialty;
 
     /*Create and set the doctor's email*/
     const email = document.createElement("h3");
     email.textContent = doctor.email;
 
     /*Create and list available appointment times*/
-    const availability  = document.createElement("h3");
-    availability .textContent = doctor.availability.join(", ");
+    const availableTimes  = document.createElement("h3");
+    availableTimes.textContent = doctor.availableTimes.join(", ");
 
-    /*Append all info elements to the doctor info container*/
+    /* Append all info elements to the doctor info container */
     infoDiv.appendChild(name);
-    infoDiv.appendChild(specialization);
+    infoDiv.appendChild(specialty);
     infoDiv.appendChild(email);
-    infoDiv.appendChild(availability);
+    infoDiv.appendChild(availableTimes);
 
-    /*Create a container for card action buttons*/
+    /* Create a container for card action buttons*/
     const actionsDiv = document.createElement("div");
     actionsDiv.classList.add("card-actions");
 
@@ -72,7 +72,7 @@ export function createDoctorCard(doctor) {
         /* TODO: remove the card from the DOM */
         }
       });
-      actionDiv.appendChild(removeBtn);
+      actionsDiv.appendChild(removeBtn);
     } else if (role === "patient") {
       /*
       === PATIENT (NOT LOGGED-IN) ROLE ACTIONS ===
@@ -85,7 +85,7 @@ export function createDoctorCard(doctor) {
       bookNow.addEventListener("click", () => {
         alert("Patient needs to login first.");
       });
-      actionDiv.appendChild(bookNow);
+      actionsDiv.appendChild(bookNow);
     } else if (role === "loggedPatient") {
       /*
       === LOGGED-IN PATIENT ROLE ACTIONS ===
@@ -103,14 +103,14 @@ export function createDoctorCard(doctor) {
         const patientData = await getPatientData(token);
         showBookingOverlay(e, doctor, patientData);
       });
-      actionDiv.appendChild(bookNow);
+      actionsDiv.appendChild(bookNow);
     }
 
-  /*Append doctor info and action buttons to the card*/
+  /* Append doctor info and action buttons to the card */
   card.appendChild(infoDiv);
   card.appendChild(actionsDiv);
 
-  /*Return the complete doctor card element*/
+  /* Return the complete doctor card element */
   return card;
 }
 

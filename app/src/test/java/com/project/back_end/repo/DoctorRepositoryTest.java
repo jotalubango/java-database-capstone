@@ -27,7 +27,7 @@ class DoctorRepositoryTest {
     @DisplayName("Should find doctor by email when doctor exists")
     void findByEmail() {
         assumeTrue(isRepositoryTestsEnabled, "Skipping test if repository.tests.enabled.property is false");
-        Doctor doctor = doctorRepository.findByEmail("dr.johnson@example.com");
+        Doctor doctor = doctorRepository.findByEmailIgnoreCase("dr.johnson@example.com");
         assertThat(doctor).isNotNull();
         System.out.println("DoctorRepositoryTest.findByEmail - Should find doctor by email when doctor exists" + " - OK - " + doctor);
         System.out.println("DoctorRepositoryTest.findByEmail - Should find doctor by email when doctor exists" + " - OK");

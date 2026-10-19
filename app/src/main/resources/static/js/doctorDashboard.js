@@ -11,7 +11,7 @@ function getTodayDateString() {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
-  return `\({year}-\){month}-${day}`;
+  return `${year}-${month}-${day}`;
 }
 
 // Initialize Global Variables
@@ -109,6 +109,9 @@ export async function loadAppointments() {
 
   try {
     // Step 1: Call getAllAppointments with selectedDate, patientName, and token
+
+    console.log("selectedDate: " + selectedDate + " patientName: " + patientName);
+
     const appointments = await getAllAppointments(selectedDate, patientName, token);
 
     // Step 2: Clear the table body content before rendering new rows
@@ -128,14 +131,13 @@ export async function loadAppointments() {
     appointments.forEach((appointment) => {
       // Construct a 'patient' object with id, name, phone, and email
       const patient = {
-        id: appointment.patientId || appointment.id,
-        name: appointment.patientName || appointment.name,
-        phone: appointment.patientPhone || appointment.phone,
-        email: appointment.patientEmail || appointment.email
+        id: appointment.id,
+        name: appointment.patient.name ,
+        phone: appointment.patient.phone ,
+        email: appointment.patient.email
       };
-
       // Call createPatientRow to generate a table row and append it to table body
-      const rowElement = createPatientRow(patient, appointment);
+      const rowElement = createPatientRow(patient, appointment.id, appointment.doctor.id);
       appointmentTableBody.appendChild(rowElement);
     });
 

@@ -38,21 +38,22 @@ class AppointmentControllerTest {
             String token = tokenService.generateToken("dr.adams@example.com"); // "Dr. Emily Adams"
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             ResponseEntity<?> response = appointmentController.getAppointments(
+                        LocalDate.parse("2025-04-01", formatter),
                     "n",
-                    LocalDate.parse("2025-04-01", formatter),
                     token
             );
 
             // Then: Assert result
             assertEquals(HttpStatus.OK, response.getStatusCode());
+            System.out.println("AppointmentControllerTest.getAppointments - OK - token: " + token);
             System.out.println("AppointmentControllerTest.getAppointments - OK - Appointments: " + response.getBody());
         }
 
         { // Invalid or expired token
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             ResponseEntity<?> response = appointmentController.getAppointments(
-                    "ane",
                     LocalDate.parse("2025-04-01", formatter),
+                    "ane",
                     "x"
             );
             assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());

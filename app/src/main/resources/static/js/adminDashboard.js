@@ -5,16 +5,28 @@
   - Filters doctors by name, time, or specialty
   - Adds a new doctor via modal form
 */
-import { openModal } from "./components/modals.js";
-import { getDoctors , filterDoctors , saveDoctor } from "./services/doctorServices.js";
-import { createDoctorCard } from "./components/doctorCard.js";
+import { openModal } from './components/modals.js';
+import { getDoctors , filterDoctors , saveDoctor } from './services/doctorServices.js';
+import { createDoctorCard } from './components/doctorCard.js';
 /*
   Attach a click listener to the "Add Doctor" button
   When clicked, it opens a modal form using openModal('addDoctor')
 */
-document.getElementById('addDocBtn').addEventListener('click', () => {
- openModal('addDoctor');
-});
+// TODO Uncomment the following lines
+{
+  document.getElementById('addDocBtn').addEventListener('click', () => {
+       openModal('addDoctor');
+  });
+openModal('addDoctor');
+  /*  const addDocBtn = document.getElementById('addDocBtn');
+  if(addDocBtn){
+     addDocBtn.addEventListener('click', () => {
+       openModal('addDoctor');
+     });
+  } else {
+    console.log("addDocBtn not defined.")
+  }*/
+}
 /*
   When the DOM is fully loaded:
     - Call loadDoctorCards() to fetch and display all doctors
@@ -48,11 +60,13 @@ export async function loadDoctorCards() {
   contentDiv.innerHTML = "";
 
   // 2. Fetch doctor list from the backend
-  const doctors = await getDoctors();
+  const data = await getDoctors();
+
+  const doctorsList = data.doctors;
 
   // 3. Iterate through results, create cards, and append them
-  if (Array.isArray(doctors) && doctors.length > 0) {
-    doctors.forEach(doctor => {
+  if (Array.isArray(doctorsList) && doctorsList.length > 0) {
+    doctorsList.forEach(doctor => {
       const cardElement = createDoctorCard(doctor);
       contentDiv.appendChild(cardElement);
     });

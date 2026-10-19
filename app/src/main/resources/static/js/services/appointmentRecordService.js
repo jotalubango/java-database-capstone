@@ -9,7 +9,6 @@ export async function getAllAppointments(date, patientName, token) {
   if (!response.ok) {
     throw new Error("Failed to fetch appointments");
   }
-
   return await response.json();
 }
 

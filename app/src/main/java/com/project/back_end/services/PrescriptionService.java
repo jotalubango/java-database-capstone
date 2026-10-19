@@ -38,14 +38,14 @@ public class PrescriptionService {
     //    - If a prescription exists, it returns a `400 Bad Request` with a message stating the prescription already exists.
     //    - If no prescription exists, it saves the new prescription and returns a `201 Created` status with a success message.
     //    - Instruction: Handle errors by providing appropriate status codes and messages, ensuring that multiple prescriptions for the same appointment are not saved.
-    public void savePrescription(Prescription prescription) {
+    public Prescription savePrescription(Prescription prescription) {
+        List<Prescription> prescriptions = prescriptionRepository.findByAppointmentId(prescription.getAppointmentId());
+        if (!prescriptions.isEmpty()) {
+            // in the @RestControllerAdvice Class ValidationFailed the ValidationException returns a HttpStatus.BAD_REQUEST to the ccaller
+            throw new ValidationException("Prescription already exists for the appointment.");
+        }
         try {
-            List<Prescription> prescriptions = prescriptionRepository.findByAppointmentId(prescription.getAppointmentId());
-            if (!prescriptions.isEmpty()) {
-                // in the @RestControllerAdvice Class ValidationFailed the ValidationException returns a HttpStatus.BAD_REQUEST to the ccaller
-                throw new ValidationException("Prescription already exists for the appointment.");
-            }
-            prescriptionRepository.save(prescription);
+            return prescriptionRepository.save(prescription);
         } catch (Exception e) {
             logger.error("Error occurred while creating prescription: {}", e.getMessage(), e);
             // CallingRepositoryException returns an HTTP `500 Internal Server Error` response to the caller
@@ -58,15 +58,13 @@ public class PrescriptionService {
     //    - If a prescription is found, it returns it within a map wrapped in a `200 OK` status.
     //    - If there is an error while fetching the prescription, it logs the error and returns a `500 Internal Server Error` status with an error message.
     //    - Instruction: Ensure that this method handles edge cases, such as no prescriptions found for the given appointment, by returning meaningful responses.
-    public ResponseEntity<Map<String, Object>> getPrescription(Long appointmentId) {
+    public Prescription getPrescription(Long appointmentId) {
+        List<Prescription> prescriptions = prescriptionRepository.findByAppointmentId(appointmentId);
+        if (prescriptions.isEmpty()) {
+            throw new EntityNotFoundException("Prescription not found.");
+        }
         try {
-            List<Prescription> prescriptions = prescriptionRepository.findByAppointmentId(appointmentId);
-            if (prescriptions.isEmpty()) {
-                throw new EntityNotFoundException("Prescription not found.");
-
-            }
-            return ResponseEntity.ok(Map.of("data", prescriptions.getFirst()));
-
+            return prescriptions.getFirst();
         } catch (Exception e) {
             logger.error("Error occurred while calling prescription repository: {}", e.getMessage(), e);
             // CallingRepositoryException returns an HTTP `500 Internal Server Error` response to the caller

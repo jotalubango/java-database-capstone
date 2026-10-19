@@ -1,6 +1,6 @@
 use test
 
-db.prescriptions.insertMany([
+db.prescription.insertMany([
   {
   "_id": ObjectId("6807dd712725f013281e7201"),
   "patientName": "John Smith",

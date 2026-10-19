@@ -8,31 +8,31 @@ class PatientServiceTest {
 
     @Test
     void createPatient() {
-        // TODO
+        // Tested through Patient Controller
     }
 
     @Test
     void getPatientAppointment() {
-        // TODO
+        // Tested through Patient Controller
     }
 
     @Test
     void filterByCondition() {
-        // TODO
+        // Tested through Patient Controller
     }
 
     @Test
     void filterByDoctor() {
-        // TODO
+        // Tested through Patient Controller
     }
 
     @Test
     void filterByDoctorAndCondition() {
-        // TODO
+        // Tested through Patient Controller
     }
 
     @Test
     void getPatientDetails() {
-        // TODO
+        // Tested through Patient Controller
     }
 }

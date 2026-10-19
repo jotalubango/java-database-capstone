@@ -26,7 +26,9 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     //      - This method retrieves a Doctor by their email.
     //      - Return type: Doctor
     //      - Parameters: String email
-    Doctor findByEmail(String email);
+    @Query("SELECT d FROM Doctor d " +
+            "WHERE LOWER(d.email) = LOWER(:email) " )
+    Doctor findByEmailIgnoreCase(@Param("email") String email);
 
     //    - **findByNameLike**:
     //      - This method retrieves a list of Doctors whose name contains the provided search string (case-sensitive).

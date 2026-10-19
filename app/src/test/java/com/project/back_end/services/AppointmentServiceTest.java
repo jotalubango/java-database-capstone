@@ -26,8 +26,8 @@ class AppointmentServiceTest {
     @Autowired
     private AppointmentService appointmentService;
 
-    @Autowired
-    private TokenService tokenService;
+//    @Autowired
+//    private TokenService tokenService;
 
     @Value("${service.tests.enabled:false}")
     private boolean isServiceTestsEnabled;
@@ -240,10 +240,9 @@ class AppointmentServiceTest {
                     0
             );
 
-            String token = tokenService.generateToken("ben.j@example.com") ;
             EntityNotFoundException exception = assertThrows(
                     EntityNotFoundException.class,
-                    () -> appointmentService.cancelAppointment(token, 1400L)
+                    () -> appointmentService.cancelAppointment(1400L, 14L)
             );
             System.out.println("AppointmentServiceTest.cancelAppointment - OK - Cannot cancel the appointment:  " + exception.getMessage());
         }
@@ -264,10 +263,10 @@ class AppointmentServiceTest {
                     0
             );
 
-            String token = tokenService.generateToken("ella.m@example.com") ;
+//            String token = tokenService.generateToken("ella.m@example.com") ;
             UnauthorizedException exception = assertThrows(
                     UnauthorizedException.class,
-                    () -> appointmentService.cancelAppointment(token, 14L)
+                    () -> appointmentService.cancelAppointment(14L, 90L)
             );
             System.out.println("AppointmentServiceTest.cancelAppointment - OK - Cannot cancel the appointment:  " + exception.getMessage());
         }
@@ -288,15 +287,14 @@ class AppointmentServiceTest {
                     1
             );
 
-            String token = tokenService.generateToken("ben.j@example.com") ;
             ValidationException exception = assertThrows(
                     ValidationException.class,
-                    () -> appointmentService.cancelAppointment(token, 63L)
+                    () -> appointmentService.cancelAppointment(63L, 14L)
             );
             System.out.println("AppointmentServiceTest.cancelAppointment - OK - Cannot cancel the appointment:  " + exception.getMessage());
         }
         {
-            // Test N - Happy path - all the conditions are satisfied for the appointment to be cancellation
+            // Test N - Happy path - all the conditions are satisfied for the appointment to be cancelled
             AppointmentDTO appointmentDTO = new AppointmentDTO(14L,
                     1L,
                     "Dr. Emily Adams",
@@ -312,8 +310,7 @@ class AppointmentServiceTest {
                     0
             );
 
-            String token = tokenService.generateToken("ben.j@example.com") ;
-            int result = appointmentService.cancelAppointment(token, 14L);
+            int result = appointmentService.cancelAppointment(14L, 14L);
             assertThat(result).isEqualTo(0);
             System.out.println("AppointmentServiceTest.cancelAppointment - OK - Appointment cancelled id:  " + appointmentDTO.getId());
         }
@@ -337,8 +334,7 @@ class AppointmentServiceTest {
     @Test
     void changeStatus() {
         assumeTrue(isServiceTestsEnabled, "Skipping test if service.tests.enabled.property is false");
-        // TODO
-        //  test changeStatus
+        //  Tested through controller
     }
 
 }

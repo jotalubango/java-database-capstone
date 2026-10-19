@@ -1,5 +1,6 @@
 // modals.js
 export function openModal(type) {
+console.log("calling openModal with type: " + type );
   let modalContent = '';
   if (type === 'addDoctor') {
     modalContent = `
@@ -64,10 +65,11 @@ export function openModal(type) {
         <button class="dashboard-btn" id="adminLoginBtn" >Login</button>
       `;
   } else if (type === 'doctorLogin') {
+    /* TODO Remove the value used for testing purposes */
     modalContent = `
         <h2>Doctor Login</h2>
-        <input type="text" id="email" placeholder="Email" class="input-field">
-        <input type="password" id="password" placeholder="Password" class="input-field">
+        <input type="text" id="email" value="dr.adams@example.com" placeholder="Email" class="input-field">
+        <input type="password" id="password" value="pass12345" placeholder="Password" class="input-field">
         <button class="dashboard-btn" id="doctorLoginBtn" >Login</button>
       `;
   }

@@ -4,7 +4,7 @@ DROP FUNCTION IF EXISTS cms.getdoctorwithmostpatientsbyyear(integer);
 
 CREATE OR REPLACE FUNCTION cms.getdoctorwithmostpatientsbyyear(
 	input_year integer)
-    RETURNS TABLE(doctor_id bigint, patients_seen bigint) 
+    RETURNS TABLE(the_year integer, doctor_id bigint, patients_seen bigint)
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -14,12 +14,12 @@ AS $BODY$
 BEGIN
     RETURN QUERY
     SELECT
-        a.doctor_id, 
+        input_year as the_year, a.doctor_id,
         COUNT(a.patient_id) AS patients_seen
     FROM
         cms.appointment a
     WHERE
-        EXTRACT(YEAR FROM a.appointmentTime) = input_year
+        EXTRACT(YEAR FROM a.appointment_time) = input_year
     GROUP BY
         a.doctor_id
     ORDER BY
