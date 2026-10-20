@@ -26,8 +26,7 @@ INSERT INTO cms.doctor (email, name, password, phone, specialty) VALUES
 ('dr.evans@example.com', 'Dr. Lucas Evans', 'evansEv1', '555-222-3334', 'Neurologist'),
 ('dr.turner@example.com', 'Dr. Grace Turner', 'turnerBurner', '555-333-4445', 'Orthopedist'),
 ('dr.hill@example.com', 'Dr. Ethan Hill', 'hillclimb', '555-444-5556', 'Pediatrician'),
-('dr.ward@example.com', 'Dr. Ruby Ward', 'wardWard', '555-555-6667', 'Dermatologist'),
-('dr.can@example.com', 'Dr. Can be deleted because has no appointments', 'cancan', '555-555-6667', 'Dermatologist');
+('dr.ward@example.com', 'Dr. Ruby Ward', 'wardWard', '555-555-6667', 'Dermatologist');
 
 INSERT INTO cms.patient (address, email, name, password, phone) VALUES
 ('101 Oak St, Cityville', 'jane.doe@example.com', 'Jane Doe', 'passJane1', '888-111-1111'),
@@ -188,7 +187,7 @@ INSERT INTO cms.appointment (appointment_time, status, doctor_id, patient_id) VA
 ('2025-04-09 11:00:00.000000', 1, 4, 6),
 ('2025-04-10 13:00:00.000000', 1, 4, 7);
 
-INSERT INTO cms.doctor_available_time (doctor_id, available_time) VALUES
+INSERT INTO cms.doctor_available_times (doctor_id, available_time) VALUES
 (1, '09:00-10:00'), (1, '10:00-11:00'), (1, '11:00-12:00'), (1, '14:00-15:00'),
 (2, '10:00-11:00'), (2, '11:00-12:00'), (2, '14:00-15:00'), (2, '15:00-16:00'),
 (3, '09:00-10:00'), (3, '11:00-12:00'), (3, '14:00-15:00'), (3, '16:00-17:00'),

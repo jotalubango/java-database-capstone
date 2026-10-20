@@ -1,6 +1,6 @@
 SELECT * FROM cms.doctor LIMIT 5;
 
-SELECT * FROM cms.doctor_available_time LIMIT 5;
+SELECT * FROM cms.doctor_available_times LIMIT 5;
 
 SELECT * FROM cms.patient LIMIT 5;
 

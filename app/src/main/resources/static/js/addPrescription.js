@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const mode = urlParams.get("mode");
   const token = localStorage.getItem("token");
   const patientName = urlParams.get("patientName")
+  console.log("urlParams: " + urlParams);
+//  console.log("urlParams.appointmentId: " + appointmentId);
+//  console.log("urlParams.mode: " + mode);
+//  console.log("urlParams.token: " + token);
+//  console.log("urlParams.patientName: " + patientName);
 
   if (heading) {
     if (mode === "view") {
@@ -22,7 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       heading.innerHTML = `Add <span>Prescription</span>`;
     }
   }
-
 
   // Pre-fill patient name
   if (patientNameInput && patientName) {
@@ -33,12 +37,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (appointmentId && token) {
     try {
       const response = await getPrescription(appointmentId, token);
-      console.log("getPrescription :: ", response);
+      console.log("getPrescription: ", response);
 
       // Now, check if the prescription exists in the response and access it from the array
-      if (response.prescription && response.prescription.length > 0) {
-        const existingPrescription = response.prescription[0]; // Access first prescription object
-        patientNameInput.value = existingPrescription.patientName || YOU;
+//      if (response.prescription && response.prescription.length > 0) {
+      if (response.prescription) {
+      console.log("--------------------------------------> filling the values.")
+        const existingPrescription = response.prescription; // [0]Access first prescription object
+        patientNameInput.value = existingPrescription.patientName || "";
         medicinesInput.value = existingPrescription.medication || "";
         dosageInput.value = existingPrescription.dosage || "";
         notesInput.value = existingPrescription.doctorNotes || "";

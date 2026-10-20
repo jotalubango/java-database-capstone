@@ -1,4 +1,7 @@
 // modals.js
+
+import{ adminAddDoctor } from '../adminDashboardFunctions.js';
+
 export function openModal(type) {
 console.log("calling openModal with type: " + type );
   let modalContent = '';
@@ -6,8 +9,8 @@ console.log("calling openModal with type: " + type );
     modalContent = `
          <h2>Add Doctor</h2>
          <input type="text" id="doctorName" placeholder="Doctor Name" class="input-field">
-         <select id="specialization" class="input-field select-dropdown">
-             <option value="">Specialization</option>
+         <select id="doctorSpecialty" class="input-field select-dropdown">
+             <option value="">Doctor specialty</option>
                         <option value="cardiologist">Cardiologist</option>
                         <option value="dermatologist">Dermatologist</option>
                         <option value="neurologist">Neurologist</option>
@@ -41,9 +44,9 @@ console.log("calling openModal with type: " + type );
   } else if (type === 'patientLogin') {
     modalContent = `
         <h2>Patient Login</h2>
-        <input type="text" id="email" placeholder="Email" class="input-field">
-        <input type="password" id="password" placeholder="Password" class="input-field">
-        <button class="dashboard-btn" id="loginBtn">Login</button>
+        <input type="text" id="email" value="john.smith@example.com" placeholder="Email" class="input-field">
+        <input type="password" id="password" value="smithSecure" placeholder="Password" class="input-field">
+        <button class="dashboard-btn" id="patientLoginBtn">Login</button>
       `;
   }
   else if (type === "patientSignup") {
@@ -58,10 +61,11 @@ console.log("calling openModal with type: " + type );
     `;
 
   } else if (type === 'adminLogin') {
+  /* TODO Remove the value used for testing purposes */
     modalContent = `
         <h2>Admin Login</h2>
-        <input type="text" id="username" name="username" placeholder="Username" class="input-field">
-        <input type="password" id="password" name="password" placeholder="Password" class="input-field">
+        <input type="text" id="username" name="username" value="admin" placeholder="Username" class="input-field">
+        <input type="password" id="password" name="password" value="admin@1234" placeholder="Password" class="input-field">
         <button class="dashboard-btn" id="adminLoginBtn" >Login</button>
       `;
   } else if (type === 'doctorLogin') {
@@ -78,26 +82,28 @@ console.log("calling openModal with type: " + type );
   document.getElementById('modal').style.display = 'block';
 
   document.getElementById('closeModal').onclick = () => {
-    document.getElementById('modal').style.display = 'none';
+      document.getElementById('modal').style.display = 'none';
   };
 
-  if (type === "patientSignup") {
-    document.getElementById("signupBtn").addEventListener("click", signupPatient);
+  if (type === 'addDoctor') {
+      console.log("type: " + type + " ('saveDoctorBtn').addEventListener('click', adminAddDoctor)" );
+      document.getElementById('saveDoctorBtn').addEventListener('click', (event) => { adminAddDoctor(event); });
   }
 
   if (type === "patientLogin") {
-    document.getElementById("loginBtn").addEventListener("click", loginPatient);
+      document.getElementById("patientLoginBtn").addEventListener("click", () => { patientLoginHandler(); } );
   }
 
-  if (type === 'addDoctor') {
-    document.getElementById('saveDoctorBtn').addEventListener('click', adminAddDoctor);
+  if (type === "patientSignup") {
+      document.getElementById("signupBtn").addEventListener("click", signupPatient);
   }
 
   if (type === 'adminLogin') {
-    document.getElementById('adminLoginBtn').addEventListener('click', adminLoginHandler);
+      document.getElementById('adminLoginBtn').addEventListener('click', () => { adminLoginHandler(); } );
   }
 
   if (type === 'doctorLogin') {
-    document.getElementById('doctorLoginBtn').addEventListener('click', doctorLoginHandler);
+      document.getElementById('doctorLoginBtn').addEventListener('click', () => { doctorLoginHandler(); }  );
   }
+
 }

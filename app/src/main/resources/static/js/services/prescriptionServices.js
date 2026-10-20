@@ -22,6 +22,7 @@ export async function savePrescription(prescription, token) {
 
 export async function getPrescription(appointmentId, token) {
   try {
+console.log("getPrescription.FETCH URL GET: " + `${PRESCRITION_API}/${appointmentId}/${token}`);
     const response = await fetch(`${PRESCRITION_API}/${appointmentId}/${token}`, {
       method: "GET",
       headers: {
@@ -36,8 +37,7 @@ export async function getPrescription(appointmentId, token) {
     }
 
     const result = await response.json();
-    console.log(result)
-    console.log(result)
+console.log("getPrescription.Return: " + result);
     return result; // This should be your prescription object
   } catch (error) {
     console.error("Error :: getPrescription ::", error);

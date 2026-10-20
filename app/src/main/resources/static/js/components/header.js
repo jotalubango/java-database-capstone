@@ -1,3 +1,4 @@
+/* header.js */
 /* 1. Define the `renderHeader` Function */
 /** The `renderHeader` function is responsible for rendering the entire header based on the user's session, role, and whether they are logged in.*/
 function renderHeader() {
@@ -8,7 +9,7 @@ function renderHeader() {
   /* 3. Check if the Current Page is the Root Page */
   /** The `window.location.pathname` is checked to see if the current page is the root (`/`). If true, the user's session data (role) is removed from `localStorage`, and the header is rendered without any user-specific elements (just the logo and site title).*/
    /*if (window.location.pathname.endsWith("/")) {*/ /* TODO: Verify this condition */
-   if (window.location.pathname.endsWith("/index.html")) {
+   if (window.location.pathname.endsWith("/index.html") || (window.location.pathname.endsWith("/")) ) {
      localStorage.removeItem("userRole");
      localStorage.removeItem("token");
      headerDiv.innerHTML = `
@@ -52,7 +53,7 @@ function renderHeader() {
        - **LoggedPatient**: Has home, appointments, and logout options.*/
   if (role === "admin") {
     headerContent += `
-      <button id="addDocBtn" class="adminBtn" onclick="openModal('addDoctor')">Add Doctor</button>
+      <button id="addDocBtn" class="adminBtn">Add Doctor</button>
       <a href="#" onclick="logout()">Logout</a>`;
   } else if (role === "doctor") {
     headerContent += `
@@ -103,15 +104,6 @@ function renderHeader() {
         adminModal.style.display = "block";
       });
     }
-
-    // TODO: added by jp
-/*      const addDocBtn = document.getElementById('addDocBtn');
-      if(addDocBtn){
-         addDocBtn.addEventListener('click', () => {
-           openModal('addDoctor');
-         });
-      }*/
-
 
   }
 

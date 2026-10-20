@@ -75,6 +75,7 @@ public class AppointmentController {
         if (patientId == null) {
             return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Invalid or expired token");
         }
+        System.out.println("bookAppointment.appointmentCreateDTO: " + appointmentCreateDTO);
         if (!patientId.equals(appointmentCreateDTO.getPatientId())) {
             return ValidationFailed.buildResponseEntity(HttpStatus.UNAUTHORIZED, "Patients can only book their own appointments.");
         }

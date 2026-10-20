@@ -9,7 +9,7 @@
 -- ------------------------------------------
 -- DROP TABLES
 -- ------------------------------------------
-DROP TABLE IF EXISTS cms.doctor_available_time;
+DROP TABLE IF EXISTS cms.doctor_available_times;
 DROP TABLE IF EXISTS cms.appointment;
 DROP TABLE IF EXISTS cms.patient;
 DROP TABLE IF EXISTS cms.doctor;
@@ -103,9 +103,9 @@ ALTER TABLE IF EXISTS cms.appointment
     OWNER to postgres;
 
 -- ------------------------------------------
--- Table: cms.doctor_available_time
+-- Table: cms.doctor_available_times
 -- ------------------------------------------
-CREATE TABLE IF NOT EXISTS cms.doctor_available_time
+CREATE TABLE IF NOT EXISTS cms.doctor_available_times
 (
     doctor_id bigint NOT NULL,
     available_time character varying(255) COLLATE pg_catalog."default",
@@ -117,5 +117,5 @@ CREATE TABLE IF NOT EXISTS cms.doctor_available_time
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS cms.doctor_available_time
+ALTER TABLE IF EXISTS cms.doctor_available_times
     OWNER to postgres;

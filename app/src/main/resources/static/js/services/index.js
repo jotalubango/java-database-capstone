@@ -29,6 +29,12 @@ window.onload = function () {
       openModal('doctorLogin');
     });
   }
+  const patientBtn = document.getElementById('patientLogin');
+  if(patientBtn) {
+    patientBtn.addEventListener('click', () => {
+      selectRole('patient');
+    });
+  }
 }
 /* -------------------------------------------------------------------------------
     Define a function named adminLoginHandler on the global window object
@@ -39,7 +45,7 @@ window.adminLoginHandler = async () => {
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
     /*  Step 2: Create an admin object with these credentials */
-    const adminData = { username, password };
+    const loginData = { username, password };
     /* Step 6: Wrap everything in a try-catch to handle network or server errors
         - Show a generic error message if something goes wrong */
     try {
@@ -50,29 +56,26 @@ window.adminLoginHandler = async () => {
         const response = await fetch(ADMIN_API, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(adminData)
+            body: JSON.stringify(loginData)
         });
         // - Parse the JSON response to get the token or the message
-        const data = await response.json();
+        const responseData = await response.json();
         /* Step 5: If login fails or credentials are invalid:
             - Show an alert with an error message */
         if (!response.ok) {
-            alert("Error on adminLoginHandler: " + data.message);
-            /* alert("An error occurred: " + `status: ${response.status}`); */
-            /* throw new Error(message + " " + `HTTP error! status: ${response.status}`); */
+            alert('❌ Invalid credentials! ' + responseData.message );
             return;
         }
         /* Step 4: If the response is successful:
             - Store the token in localStorage
             - Call selectRole('admin') to proceed with admin-specific behavior */
-        const token = data.token; // Adjust property name if your API uses 'accessToken' or 'jwt'
         // Store the token in localStorage
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', responseData.token); // Adjust property name if your API uses 'accessToken' or 'jwt'
         // Call selectRole('admin')
         selectRole('admin');
     } catch (error) {
-        console.error("Error on adminLoginHandler: ", error);
-        alert("Error: " + error.message);
+        console.error("Error on doctorLoginHandler: ", error);
+        alert("❌ Failed to Login: ", error);
         return;
     }
 }
@@ -84,27 +87,25 @@ window.adminLoginHandler = async () => {
 window.doctorLoginHandler = async () => {
     const username = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    const doctorData = { username, password };
+    const loginData = { username, password };
     try {
         const response = await fetch(DOCTOR_API, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(doctorData)
+            body: JSON.stringify(loginData)
         });
-        const data = await response.json();
+        const responseData = await response.json();
         if (!response.ok) {
-            alert("Error on doctorLoginHandler: " + data.message);
+            alert('❌ Invalid credentials! ' + responseData.message );
             return;
         }
-        const token = data.token; // Adjust property name if your API uses 'accessToken' or 'jwt'
         // Store the token in localStorage
-        localStorage.setItem('token', token);
-
+        localStorage.setItem('token', responseData.token); // Adjust property name if your API uses 'accessToken' or 'jwt'
         // Call selectRole('doctor')
         selectRole('doctor');
     } catch (error) {
         console.error("Error on doctorLoginHandler: ", error);
-        alert("Error: " + error.message);
+        alert("❌ Failed to Login: ", error);
         return;
     }
 }

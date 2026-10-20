@@ -1,27 +1,31 @@
 // render.js
-
 function selectRole(role) {
-  setRole(role);
-  const token = localStorage.getItem('token');
-  if (role === "admin") {
-    if (token) {
-    // TODO Remove console log
-      console.log("Role admin with token: calling /adminDashboard/${token}");
-      window.location.href = `/adminDashboard/${token}`;
-    }
-  } if (role === "patient") {
-    window.location.href = "/pages/patientDashboard.html";
-  } else if (role === "doctor") {
-    if (token) {
-    // TODO Remove console log
-          console.log("Role doctor with token: calling /doctorDashboard/${token}");
-      window.location.href = `/doctorDashboard/${token}`;
+    setRole(role);
+    const token = localStorage.getItem('token');
+    if (role === "admin") {
+        if (token) {
+            // TODO Remove console log
+            console.log("selectRole: admin with token: calling /adminDashboard/${token}");
+            window.location.href = `/adminDashboard/${token}`;
+        }
+    } else if (role === "doctor") {
+        if (token) {
+            // TODO Remove console log
+            console.log("selectRole: doctor with token: calling /doctorDashboard/${token}");
+            window.location.href = `/doctorDashboard/${token}`;
+        }
+    } if (role === "patient") {
+        // TODO Remove console log
+        console.log("selectRole: patient calling /pages/patientDashboard.html");
+        window.location.href = "/pages/patientDashboard.html";
     } else if (role === "loggedPatient") {
-      window.location.href = "loggedPatientDashboard.html";
+        if (token) {
+            // TODO Remove console log
+            console.log("selectRole: patient with token: calling /pages/loggedPatientDashboard");
+            window.location.href = "/pages/loggedPatientDashboard.html";
+        }
     }
-  }
 }
-
 
 function renderContent() {
   const role = getRole();

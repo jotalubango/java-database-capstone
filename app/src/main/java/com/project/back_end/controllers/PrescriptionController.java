@@ -64,7 +64,7 @@ public class PrescriptionController {
     //    - Validates the token for the `"doctor"` role using the shared service.
     //    - If the token is valid, fetches the prescription using the `PrescriptionService`.
     //    - Returns the prescription details or an appropriate error message if validation fails.
-    @GetMapping("/{token}/{appointmentId}")
+    @GetMapping("/{appointmentId}/{token}")
     @Transactional
     public ResponseEntity<?> getPrescription(
             @PathVariable("appointmentId") Long appointmentId,

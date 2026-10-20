@@ -1,69 +1,47 @@
 /* adminDashboard.js */
-/*
-  This script handles the admin dashboard functionality for managing doctors:
-  - Loads all doctor cards
-  - Filters doctors by name, time, or specialty
-  - Adds a new doctor via modal form
-*/
+/* This script handles the admin dashboard functionality for managing doctors:
+   - Loads all doctor cards
+   - Filters doctors by name, time, or specialty
+   - Adds a new doctor via modal form */
 import { openModal } from './components/modals.js';
-import { getDoctors , filterDoctors , saveDoctor } from './services/doctorServices.js';
+import { getDoctors , filterDoctors } from './services/doctorServices.js';
 import { createDoctorCard } from './components/doctorCard.js';
-/*
-  Attach a click listener to the "Add Doctor" button
-  When clicked, it opens a modal form using openModal('addDoctor')
-*/
-// TODO Uncomment the following lines
-{
-  document.getElementById('addDocBtn').addEventListener('click', () => {
-       openModal('addDoctor');
-  });
-openModal('addDoctor');
-  /*  const addDocBtn = document.getElementById('addDocBtn');
-  if(addDocBtn){
-     addDocBtn.addEventListener('click', () => {
-       openModal('addDoctor');
-     });
-  } else {
-    console.log("addDocBtn not defined.")
-  }*/
-}
-/*
-  When the DOM is fully loaded:
-    - Call loadDoctorCards() to fetch and display all doctors
-*/
-// Trigger loadDoctorCards on page load once the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", () => {
-loadDoctorCards();
-});
-/*
-  Function: loadDoctorCards
-  Purpose: Fetch all doctors and display them as cards
 
+/* When the header is fully loaded:
+   Attach a click listener to the "Add Doctor" button
+    When clicked, it opens a modal form using openModal('addDoctor')*/
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("Attach listener to addDocBtn => openModal('addDoctor')");
+        document.getElementById('addDocBtn').addEventListener('click', () => {
+           openModal('addDoctor');
+        });
+});
+
+/* When the DOM is fully loaded: - Call loadDoctorCards() to fetch and display all doctors */
+document.addEventListener("DOMContentLoaded", () => {
+    loadDoctorCards();
+});
+
+/* Function: loadDoctorCards
+   Purpose: Fetch all doctors and display them as cards
     Call getDoctors() from the service layer
     Clear the current content area
     For each doctor returned:
     - Create a doctor card using createDoctorCard()
     - Append it to the content div
-
-    Handle any fetch errors by logging them
-*/
+    Handle any fetch errors by logging them */
 export async function loadDoctorCards() {
   const contentDiv = document.getElementById("content");
-
   // Guard check in case the container element isn't present
   if (!contentDiv) {
     console.error("Target container element '#content' not found.");
     return;
   }
-
   // 1. Clear existing content
   contentDiv.innerHTML = "";
-
   // 2. Fetch doctor list from the backend
   const data = await getDoctors();
-
   const doctorsList = data.doctors;
-
   // 3. Iterate through results, create cards, and append them
   if (Array.isArray(doctorsList) && doctorsList.length > 0) {
     doctorsList.forEach(doctor => {
@@ -75,16 +53,29 @@ export async function loadDoctorCards() {
   }
 }
 
-/*
-  Attach 'input' and 'change' event listeners to the search bar and filter dropdowns
-  On any input change, call filterDoctorsOnChange()
-*/
+/* Attach 'input' and 'change' event listeners to the search bar and filter dropdowns
+   On any input change, call filterDoctorsOnChange() */
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("searchBar").addEventListener("input", filterDoctorsOnChange);
+//    document.getElementById("searchBar").addEventListener("input", () => {
+//        debounce(filterDoctorsOnChange,1000);
+//    });
     document.getElementById("filterTime").addEventListener("change", filterDoctorsOnChange);
     document.getElementById("filterSpecialty").addEventListener("change", filterDoctorsOnChange);
 });
+/*// 1. Create a generic debounce helper function
+function debounce(func, delay) {
+    let timeoutId;
+    return function (...args) {
+        // Clear the previous timer every time a new keystroke comes in
+        clearTimeout(timeoutId);
 
+        // Set a new timer
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}*/
 /*
   Function: filterDoctorsOnChange
   Purpose: Filter doctors based on name, available time, and specialty
@@ -103,17 +94,17 @@ document.addEventListener("DOMContentLoaded", () => {
 export async function filterDoctorsOnChange() {
   try {
     // 1. Read values from the search bar and filter inputs
-    const nameInput = document.getElementById("search-name");
-    const timeInput = document.getElementById("filter-time");
-    const specialtyInput = document.getElementById("filter-specialty");
+    const nameInput = document.getElementById("searchBar");
+    const timeInput = document.getElementById("filterTime");
+    const specialtyInput = document.getElementById("filterSpecialty");
 
     // 2. Normalize empty values (or whitespace-only) to null
-    const name = nameInput && nameInput.value.trim() !== "" ? nameInput.value.trim() : null;
-    const time = timeInput && timeInput.value.trim() !== "" ? timeInput.value.trim() : null;
-    const specialty = specialtyInput && specialtyInput.value.trim() !== "" ? specialtyInput.value.trim() : null;
+    let name = nameInput && nameInput.value.trim() !== "" ? nameInput.value.trim() : "null";
+    let time = timeInput && timeInput.value.trim() !== "" ? timeInput.value.trim() : "null";
+    let specialty = specialtyInput && specialtyInput.value.trim() !== "" ? specialtyInput.value.trim() : "null";
 
     // 3. Call filterDoctors service function
-    const result = await filterDoctors(name, time, specialty);
+    const result = await filterDoctors(name, specialty, time);
     const doctors = result && result.doctors ? result.doctors : [];
 
     // 4. Render doctors if found, otherwise display no matches message
@@ -172,6 +163,7 @@ export function renderDoctorCards(doctors) {
 
     If saving fails, show an error message
 */
+/*
 export async function adminAddDoctor(event) {
   // Prevent default form submission if triggered by a submit event
   if (event && event.preventDefault) {
@@ -186,12 +178,14 @@ export async function adminAddDoctor(event) {
   }
 
   // 2. Collect input values from the modal form
-  const name = document.getElementById('doctor-name')?.value.trim();
-  const email = document.getElementById('doctor-email')?.value.trim();
-  const phone = document.getElementById('doctor-phone')?.value.trim();
-  const password = document.getElementById('doctor-password')?.value;
-  const specialty = document.getElementById('doctor-specialty')?.value.trim();
-  const availableTimes = document.getElementById('doctor-times')?.value.trim();
+  const name = document.getElementById('doctorName')?.value.trim();
+  const email = document.getElementById('doctorEmail')?.value.trim();
+  const phone = document.getElementById('doctorPhone')?.value.trim();
+  const password = document.getElementById('doctorPassword')?.value;
+  const specialty = document.getElementById('doctorSpecialty')?.value.trim();
+  const availableTimes = Array.from(
+            document.querySelectorAll('.availability-container input[name="availability"]:checked')
+        ).map(cb => cb.value);
 
   // 3. Build the doctor object
   const doctor = {
@@ -227,6 +221,7 @@ export async function adminAddDoctor(event) {
     alert('An unexpected error occurred while adding the doctor.');
   }
 }
+*/
 
 /*
   This script handles the admin dashboard functionality for managing doctors:
@@ -264,7 +259,7 @@ export async function adminAddDoctor(event) {
 
     Read values from the search bar and filters
     Normalize empty values to null
-    Call filterDoctors(name, time, specialty) from the service
+    Call filterDoctors(name, specialty, time) from the service
 
     If doctors are found:
     - Render them using createDoctorCard()

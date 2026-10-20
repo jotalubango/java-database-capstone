@@ -98,7 +98,7 @@ export async function saveDoctor(doctor, token) {
 
 /* Function: filterDoctors
    Purpose: Fetch doctors based on filtering criteria (name, time, and specialty) */
-export async function filterDoctors(name, time, specialty) {
+export async function filterDoctors(name, specialty, time ) {
 /* Use fetch() with the GET method
     - Include the name, time, and specialty as URL path parameters
    Check if the response is OK
@@ -106,11 +106,18 @@ export async function filterDoctors(name, time, specialty) {
     - If no, log the error and return an object with an empty 'doctors' array
    Catch any other errors, alert the user, and return a default empty result */
     try {
+//console.log("name: " + name + " specialty: " + specialty + " time: " + time );
         // 1. Construct URL with parameters encoded to handle spaces or special characters safely
-        const encodedName = encodeURIComponent(name || '');
-        const encodedTime = encodeURIComponent(time || '');
-        const encodedSpecialty = encodeURIComponent(specialty || '');
-        const url = `${DOCTOR_API}/filter/${encodedName}/${encodedTime}/${encodedSpecialty}`;
+                const nameX = name == null ? "null" : name;
+                const timeX = time == null ? "null" : time;
+                const specialtyX = specialty == null ? "null" : specialty;
+
+        const encodedName = encodeURIComponent(nameX || '');
+        const encodedTime = encodeURIComponent(timeX || '');
+        const encodedSpecialty = encodeURIComponent(specialtyX || '');
+//console.log("encodedName: " + encodedName + " encodedSpecialty: " + encodedSpecialty + " encodedTime: " + encodedTime);
+console.log("FETCH URL GET: " + `${DOCTOR_API}/filter/${encodedName}/${encodedSpecialty}/${encodedTime}`);
+        const url = `${DOCTOR_API}/filter/${encodedName}/${encodedSpecialty}/${encodedTime}`;
         // 2. Send GET request
         const response = await fetch(url, {
              method: 'GET',

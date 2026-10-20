@@ -30,8 +30,10 @@ async function loadDoctorCards_() {
 export function showBookingOverlay(e, doctor, patient) {
   const button = e.target;
   const rect = button.getBoundingClientRect();
-  console.log(patient.name)
-  console.log(patient)
+  console.log(patient.name);
+  console.log(patient);
+  console.log(doctor.name);
+  console.log(doctor);
   const ripple = document.createElement("div");
   ripple.classList.add("ripple-overlay");
   ripple.style.left = `${e.clientX}px`;
@@ -67,12 +69,14 @@ export function showBookingOverlay(e, doctor, patient) {
     const token = localStorage.getItem("token");
     const startTime = time.split('-')[0];
     const appointment = {
-      doctor: { id: doctor.id },
-      patient: { id: patient.id },
+      doctorId: doctor.id,
+      patientId: patient.id,
       appointmentTime: `${date}T${startTime}:00`,
       status: 0
     };
 
+console.log("The appointment record: ");
+console.log(appointment);
 
     const { success, message } = await bookAppointment(appointment, token);
 
@@ -105,7 +109,7 @@ function filterDoctorsOnChange() {
   const time = filterTime.length > 0 ? filterTime : null;
   const specialty = filterSpecialty.length > 0 ? filterSpecialty : null;
 
-  filterDoctors(name, time, specialty)
+  filterDoctors(name, specialty, time)
     .then(response => {
       const doctors = response.doctors;
       const contentDiv = document.getElementById("content");

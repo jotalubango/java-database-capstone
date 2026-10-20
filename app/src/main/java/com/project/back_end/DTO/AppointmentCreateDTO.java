@@ -24,4 +24,13 @@ public class AppointmentCreateDTO {
     public LocalDateTime getAppointmentTime() {
         return appointmentTime;
     }
+
+    @Override
+    public String toString() {
+        return "AppointmentCreateDTO{" +
+                "doctorId=" + doctorId +
+                ", patientId=" + patientId +
+                ", appointmentTime=" + appointmentTime +
+                '}';
+    }
 }

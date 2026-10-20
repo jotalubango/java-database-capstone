@@ -5,8 +5,6 @@ import { createDoctorCard } from './components/doctorCard.js';
 import { filterDoctors } from './services/doctorServices.js';//call the same function to avoid duplication coz the functionality was same
 import { patientSignup, patientLogin } from './services/patientServices.js';
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
   loadDoctorCards();
 });
@@ -28,12 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function loadDoctorCards() {
-  getDoctors()
-    .then(doctors => {
-      const contentDiv = document.getElementById("content");
-      contentDiv.innerHTML = "";
+    const contentDiv = document.getElementById("content");
+    // Guard check in case the container element isn't present
+    if (!contentDiv) {
+        console.error("Target container element '#content' not found.");
+        return;
+    }
+    // 1. Clear existing content
+    contentDiv.innerHTML = "";
 
-      doctors.forEach(doctor => {
+    getDoctors()
+    .then(result => {
+      result.doctors.forEach(doctor => {
         const card = createDoctorCard(doctor);
         contentDiv.appendChild(card);
       });
@@ -59,7 +63,7 @@ function filterDoctorsOnChange() {
   const time = filterTime.length > 0 ? filterTime : null;
   const specialty = filterSpecialty.length > 0 ? filterSpecialty : null;
 
-  filterDoctors(name, time, specialty)
+  filterDoctors(name, specialty, time)
     .then(response => {
       const doctors = response.doctors;
       const contentDiv = document.getElementById("content");
@@ -104,33 +108,23 @@ window.signupPatient = async function () {
   }
 };
 
-window.loginPatient = async function () {
-  try {
-    const email = document.getElementById("email").value;
+window.patientLoginHandler = async function () {
+    const username = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-
-    const data = {
-      email,
-      password
+    const data = { username, password };
+    try {
+        const response = await patientLogin(data);
+        const responseData = await response.json();
+        if (!response.ok) {
+            alert('❌ Invalid credentials! ' + responseData.message );
+            return;
+        }
+        // Store the token in localStorage
+        localStorage.setItem('token', responseData.token); // Adjust property name if your API uses 'accessToken' or 'jwt'
+        // Call selectRole('loggedPatient')
+        selectRole('loggedPatient');
+    } catch (error) {
+        alert("❌ Failed to Login : ", error);
+        return;
     }
-    console.log("loginPatient :: ", data)
-    const response = await patientLogin(data);
-    console.log("Status Code:", response.status);
-    console.log("Response OK:", response.ok);
-    if (response.ok) {
-      const result = await response.json();
-      console.log(result);
-      selectRole('loggedPatient');
-      localStorage.setItem('token', result.token)
-      window.location.href = '/pages/loggedPatientDashboard.html';
-    } else {
-      alert('❌ Invalid credentials!');
-    }
-  }
-  catch (error) {
-    alert("❌ Failed to Login : ", error);
-    console.log("Error :: loginPatient :: ", error)
-  }
-
-
 }

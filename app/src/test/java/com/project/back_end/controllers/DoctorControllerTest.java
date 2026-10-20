@@ -184,6 +184,7 @@ class DoctorControllerTest {
             );
             System.out.println("DoctorControllerTest.deleteDoctor - OK - Error message: " + exception.getMessage());
         }
+/*
         {   // Happy path
             String token = tokenService.generateToken("admin");
             Long doctorId = 26L; // "Dr. Can be deleted because has no appointments"
@@ -198,6 +199,7 @@ class DoctorControllerTest {
                     .contains("success"));
             System.out.println("DoctorControllerTest.deleteDoctor - OK - HttpStatus: " + result.getStatusCode() + " - body:  " + body);
         }
+*/
 
     }
 

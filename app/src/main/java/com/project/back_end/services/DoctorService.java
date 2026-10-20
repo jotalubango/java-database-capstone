@@ -222,6 +222,11 @@ public class DoctorService {
     //    - Given a list of doctors and an indicator containing the string AM or PM returns a filtered list of Doctors
     //      containing the doctors with some time slot available in the specified time periodo (AM/PM)
     private List<Doctor> filterDoctorListByTimeAmPm(String indicatorAmOrPm, List<Doctor> doctors) {
+        if (indicatorAmOrPm == null || indicatorAmOrPm.isEmpty() ||
+                (!indicatorAmOrPm.equalsIgnoreCase("AM") && !indicatorAmOrPm.equalsIgnoreCase("PM"))
+        ) {
+            return doctors; // Nothing to filter
+        }
         List<Doctor> doctorsFiltered = new ArrayList<>();
         for (Doctor doc : doctors) {
             int number_of_AM_slots = 0;

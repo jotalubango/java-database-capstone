@@ -27,7 +27,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     //      - Return type: Doctor
     //      - Parameters: String email
     @Query("SELECT d FROM Doctor d " +
-            "WHERE LOWER(d.email) = LOWER(:email) " )
+            "WHERE LOWER(d.email) = LOWER(:email) ")
     Doctor findByEmailIgnoreCase(@Param("email") String email);
 
     //    - **findByNameLike**:
@@ -47,7 +47,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     //      - Parameters: String name, String specialty
     @Query("SELECT d FROM Doctor d " +
             "WHERE LOWER(d.name) LIKE LOWER(CONCAT('%',:name,'%')) " +
-            " AND LOWER(d.specialty) = LOWER(:specialty) " +
+            "  AND LOWER(d.specialty) LIKE LOWER(CONCAT('%',:specialty,'%')) " +
             "ORDER BY d.id")
     List<Doctor> findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(
             @Param("name") String name,

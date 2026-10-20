@@ -131,7 +131,7 @@ export async function loadAppointments() {
     appointments.forEach((appointment) => {
       // Construct a 'patient' object with id, name, phone, and email
       const patient = {
-        id: appointment.id,
+        id: appointment.patient.id, // TODO
         name: appointment.patient.name ,
         phone: appointment.patient.phone ,
         email: appointment.patient.email

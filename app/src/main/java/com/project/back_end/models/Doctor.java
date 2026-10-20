@@ -104,7 +104,7 @@ public class Doctor {
      */
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
-            name = "doctor_available_time", // Custom table name (optional)
+            name = "doctor_available_times", // Custom table name (optional)
             joinColumns = @JoinColumn(name = "doctor_id") // Foreign key (optional)
     )
     @Column(name = "available_time")
