@@ -64,7 +64,7 @@ public class PrescriptionService {
             throw new EntityNotFoundException("Prescription not found.");
         }
         try {
-            return prescriptions.getFirst();
+            return prescriptions.get(0);
         } catch (Exception e) {
             logger.error("Error occurred while calling prescription repository: {}", e.getMessage(), e);
             // CallingRepositoryException returns an HTTP `500 Internal Server Error` response to the caller

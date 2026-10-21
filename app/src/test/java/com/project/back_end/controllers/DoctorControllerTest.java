@@ -144,7 +144,7 @@ class DoctorControllerTest {
             String token = tokenService.generateToken("admin");
             List<Doctor> doctors = doctorService.findDoctorByName("Dr. Alice Brown");
             System.out.println("AdminControllerTest.updateDoctor - size: " + doctors.size());
-            Doctor doctor = doctors.getFirst();
+            Doctor doctor = doctors.get(0);
             System.out.println("AdminControllerTest.updateDoctor - Doctor: " + doctor);
             doctor.setEmail("alice.brown@example.com");
             doctor.setPhone("1234567890");

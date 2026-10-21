@@ -29,7 +29,7 @@ class PrescriptionRepositoryTest {
         // Then: Assert result
         assertNotNull(prescriptions);
         assertEquals(1, prescriptions.size());
-        assertEquals("Paracetamol", prescriptions.getFirst().getMedication());
+        assertEquals("Paracetamol", prescriptions.get(0).getMedication());
         System.out.println("PrescriptionRepositoryTest.findByAppointmentIdWhenExists - OK - prescription: " + prescriptions);
         System.out.println("PrescriptionRepositoryTest.findByAppointmentIdWhenExists - OK - " + prescriptions.size());
     }

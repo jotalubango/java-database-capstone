@@ -125,7 +125,7 @@ public class AppointmentService {
             if ((appointmentTime.isAfter(ini_t) && appointmentTime.isBefore(end_t))
                     || appointmentTime.isEqual(ini_t)) {
                 throw new ValidationException("Time slot not available. The doctor has another appointment at "
-                        + list.getFirst().getAppointmentTimeOnly()
+                        + list.get(0).getAppointmentTimeOnly()
                 );
             }
         }
